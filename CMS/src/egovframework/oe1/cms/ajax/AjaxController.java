@@ -87,6 +87,7 @@ public class AjaxController {
         EgovOe1OperProcessVO processVO = new EgovOe1OperProcessVO();
         List processList = operImprovReqDAO.selectOperProcessList(operImprovReqVO.getOperImprvmRequstId());
         map.put("processList", processList);
+        System.out.println("processList : "+processList);
         
        System.out.println(map);
 
@@ -221,19 +222,29 @@ public class AjaxController {
 		}	*/
 
 		ObjectMapper mapper = new ObjectMapper();
+		System.out.println("###");
 		
 		//검색조건
 //		model.addAttribute("searchVO", vo);
 		
 		//지금 등록한 조치결과를 요청DB에 저장한다.
 		operImprovReqDAO.addOperImprovReqProcess(operImprovReqVO);
+		System.out.println("1");
 	
 		//저장된 요청DB에 있는 조치결과 값을 ProcessVO에 setting한다. 
 		operProcessVO.setOperProcessCn(operImprovReqVO.getProcessCn());
+		System.out.println("2");
+
 		operProcessVO.setOperImprvmRequstId(operImprovReqVO.getOperImprvmRequstId());
+		System.out.println("3");
+
 		operProcessVO.setOperProcessDate(operImprovReqVO.getProcessComptDe());
+		System.out.println("4");
+
 
 		operImprovReqDAO.addOperProcess(operProcessVO);
+		System.out.println("5");
+
 
 
 		System.out.println("AjaxController - addOperProcess  - END!!!");

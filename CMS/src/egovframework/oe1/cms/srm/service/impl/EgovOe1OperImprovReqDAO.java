@@ -88,7 +88,11 @@ public class EgovOe1OperImprovReqDAO extends EgovAbstractDAO {
 	 * @exception Exception
 	 */
     public void addOperImprovReqProcess(EgovOe1OperImprovReqVO vo) throws Exception {
-        update("operImprovReqDAO.addOperImprovReqProcess", vo);
+        System.out.println("operImprovReqDAO.addOperImprovReqProcess update전 ");
+    	update("operImprovReqDAO.addOperImprovReqProcess", vo);
+        System.out.println("operImprovReqDAO.addOperImprovReqProcess update후 ");
+
+        
     }
     
     /**

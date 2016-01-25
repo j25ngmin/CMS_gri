@@ -63,8 +63,9 @@ $(document).ready(function() {
 /* 선택된 운영개선요청 글과 조치이력을 레이어팝업(모달)로 가져오기. */
 function fn_find_oper_improv_req(operImprvmRequstId) {
 	
-	var param  = '/CMS_2/cms/ajax/findOperImprovReqest.do'
-
+	var param  = '/CMS/cms/ajax/findOperImprovReqest.do'
+    var str = "";
+	
 	console.log(param);
 	
 	$.ajax ({
@@ -76,8 +77,6 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 		},
 		success : function(data) {
 
-			console.log("#9  :  "+data.reqVO.frstRegisterId);
-	
 			$("#detailFrstRegisterNm").html(data.reqVO.frstRegisterNm);
 			$("#detailFrstRegisterPnttm").html(data.reqVO.frstRegisterPnttm);
 			$('input[name=deTailFrstRegisterid]').attr('value',data.reqVO.frstRegisterId);
@@ -92,17 +91,19 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$('input[name=emrgncyProcessAt]').attr('value',data.emrgncyProcessAt.code);
 			$('input[name=chargerId]').attr('value',data.reqVO.operImprvmRequstCn);
 			
+			
 			//조치이력 List
-			$('input[id=processListLength]').attr('value',processList.length);
-			for(var i=0; i< processList.length ; i++) {
-			$("#detailProcessComptDe["+i+"]").html(data.processList.processComptDe);
-			$("#detailProcessCn["+i+"]").html(data.processList.processCn);
-			}
+			var processList= data.processList;
+			var $processList= $('#processList');
+			
+			$processList.empty();
+			
+			   $.each(processList, function(index, data){
+				   $processList.append("<tr><td>"+data.operProcessDate+"<br>"+
+						   data.operProcessCn+"</td></tr>");
+			   });	
 
 			fn_buttonShow_by_authorCode_and_sessionId();
-			
-			console.log(data.requstTyCode[1].code)
-		
 			
 			var testRequstTyCode= data.requstTyCode;
 			var testEmrgncyProcessAt= data.emrgncyProcessAt;
@@ -145,13 +146,13 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 	       }
 
 	}); /* Ajax function */
-	
+	str = "";
 } /* fn_egov_inqire_notice  */
 
 /* 운영개선요청 수정한 내용을 저장하기. */
 function fn_update_oper_improv_req() {
 	
-	var url  = '/oe1/cms/ajax/updateOperImprovReqest.do'
+	var url  = '/CMS/cms/ajax/updateOperImprovReqest.do'
 		
 	var operImprovReqVO = $("#listForm").serializeArray();
 	
@@ -189,7 +190,7 @@ function fn_remove_oper_improv_req() {
 	
 	if (confirm("정말 삭제하시겠습니까?") == true){    //확인
 		
-		var url  = '/CMS_2/cms/ajax/removeOperImprovReqest.do'
+		var url  = '/CMS/cms/ajax/removeOperImprovReqest.do'
 			
 			var operImprovReqVO = $("input[name=operImprvmRequstId]").serializeArray();
 
@@ -227,16 +228,17 @@ function fn_remove_oper_improv_req() {
 } /* fn_remove_oper_improv_req */
 
 /* 운영개선요청글에 조치결과 답글 달기. */
-function fn_add_oper_process(operImprvmRequstId) {
-
-	var processCn = $("#detailProcessCn").attr("value");
-	var processComptDe = $("#detailProcessComptDe").attr("value");
+function fn_add_oper_process() {
+	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();
+	var processCn = $("#detailProcessCn").val();
+	var processComptDe = $("#detailProcessComptDe").val();
 	
-	var url  = '/CMS_2/cms/ajax/addOperProcess.do'
+	console.log("processCn : "+processCn);
+	console.log("processComptDe : "+processComptDe);
+
+	var url  = '/CMS/cms/ajax/addOperProcess.do'
 
 	console.log(url);
-
-	alert("fn_update_oper_improv_req SERIALIZE: "+operImprovReqVO);
 	
 	$.ajax ({
 		url : url ,
@@ -260,7 +262,7 @@ function fn_add_oper_improv_req() {
 
 	var operImprovReqVO = $("#listForm").serializeArray();
 	
-	var url  = '/CMS_2/cms/ajax/addOperImprovReq.do'
+	var url  = '/CMS/cms/ajax/addOperImprovReq.do'
 
 	console.log(url);
 
@@ -341,6 +343,11 @@ function fn_initBtn(author) {
 		$('#detailProcess').attr('readonly',false);
 	}
 	
+function fn_procBtn() {
+	location.reload();
+/*	$('#foo').trigger('click');
+*/	
+}
 /*function fn_regist() {
 	funtion fn_modify();
 	}*/

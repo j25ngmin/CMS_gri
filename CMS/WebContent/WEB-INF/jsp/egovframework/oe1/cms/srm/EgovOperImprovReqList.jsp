@@ -4,7 +4,8 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%-- <%@ tablib prefix="fmt" uri=http://java.sun.com/jstl/fmt_rt %> --%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="date" /> 
 
 <%
  /**
@@ -377,28 +378,26 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
         </tr>
         <tr>
 	          <th scope="row">처리완료일</th>
-	        <td>
+	        <td colspan="3">
 				<!-- <input type="text"  class="modiInput" id="detailProcessComptDe" name="processComptDe" value="" readonly> -->
 			</td>
         </tr>
         <tr>
-        	<th rowspan="2"  scope="row">조치이력</th>
-       	<c:forEach var="i"  begin="0" end="processListLength-1">
-        	<td id=" detailProcessComptDe[${i}]"></td>
-        </tr>
-        <tr>
-    	    <td id="detailProcessCn[${i}]"></td>
-   	   </c:forEach>
+        	<th id="processRow"  scope="row">조치이력</th>
+        	<td colspan="3" style="padding:0px;">
+        		<table class="table table-bordered" id="processList" style="margin-bottom:0px;">
+        		</table>
+        	</td>
         </tr>
           <tr >
           <th scope="row">조치결과</th>
           <td colspan="3">
           
-          <input type="text"  class="modiInput" id="detailProcessComptDe" name="processComptDe" value="" readonly>
-          <input type="text"  class="modiInput" id="detailProcessCn" name="processCn" value=""  readonly> 
+<!--           <input type="text"  class="modiInput" id="detailProcessComptDe" name="processComptDe" value="" readonly>
+ -->          <input type="text"  class="modiInput" id="detailProcessCn" name="processCn" value=""  readonly> 
          	  <c:if test="${  ! empty sessionScope.s_authorCode && sessionScope.s_authorCode != NULL }" > 
          	 	 <c:if test="${ (sessionScope.s_authorCode) == 'ROLE_ADMIN' || (sessionScope.s_authorCode) =='ROLE_OPER_CHARGER'}" >
-     	 			 <button type="button" class="btn btn-primary" onclick="fn_add_oper_process('<c:out value="${result.operImprvmRequstId}"/>')">조치</button>
+     	 			 <button type="button" class="btn btn-primary" id="fn_procBtn();"onclick="fn_add_oper_process()">조치</button>
           		 </c:if>
           	 </c:if>
           </td>
@@ -427,7 +426,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	<!-- Layer Popup -->
 	
 	<input type="hidden" class="modiInput" name="deTailFrstRegisterid" id="deTailFrstRegisterid" value=""/>
-	<input type="hidden" class="modiInput" name="operImprvmRequstId" value="" />
+	<input type="hidden" class="modiInput" name="operImprvmRequstId" value="${result.operImprvmRequstId}" />
 	<input type="hidden" class="modiInput" name="operJobSeCode" value="" />
 	
 	<!-- JSP에서 알 수 있는 세션 값들을 버튼/수정 UI를 분리하기 위해  fn_buttonShow_by_authorCode_and_sessionId 에서 쓴다.-->
@@ -436,9 +435,8 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	
 	<input type="hidden" name="emrgncyProcessAt" id="emrgncyProcessAt" value="" />
 	<input type="hidden" name="chargerId" id="chargerId"  value="" />
-	
-	<!-- 조치이력 List 갯수를  fn_find_oper_improv_req 에서 가져온다.-->
-	<input type="hidden" name="processListLength" id="processListLength" value="" />
+
+	<input type="hidden" name="processComptDe" id="detailProcessComptDe"  value="${date }" />
 
 
 	<!-- List -->

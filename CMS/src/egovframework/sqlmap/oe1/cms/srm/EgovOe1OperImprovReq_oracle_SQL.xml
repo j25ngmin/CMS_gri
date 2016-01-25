@@ -265,10 +265,9 @@
 	</update>
 	
 <!-- 운영개선요청 수정 / 조치결과 등록 -->
-	<update id="operImprovReqProcDAO.addOperImprovReqProcess">
+	<update id="operImprovReqDAO.addOperImprovReqProcess">
 			UPDATE OE1TNOPERIMPROVREQ
 			SET
-
 				   PROCESS_COMPT_DE     = replace(#processComptDe#,'-','')
 				   ,PROCESS_CN           = #processCn#
 			WHERE  OPER_IMPRVM_REQUST_ID = #operImprvmRequstId#		
