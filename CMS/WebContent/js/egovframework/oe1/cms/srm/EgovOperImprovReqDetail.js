@@ -18,9 +18,11 @@ $(document).ready(function() {
 	
 	$("#regBtn").click(function(event){
 		alert("regBtn 클릭 시 실행되는 제이쿼리 함수.");
-		fn_modify();
+		fn_modify(true);
+		$(".no_regist").attr('style', 'display: none');
 		$("#detailFrstRegisterNm").html($("#s_mberNm").val());
 		$("#detailFrstRegisterPnttm").html($("#detailProcessComptDe").val());
+		//fn_save();
 		
 	});
 
@@ -84,14 +86,14 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$("#detailFrstRegisterPnttm").html(data.reqVO.frstRegisterPnttm);
 			$('input[name=deTailFrstRegisterid]').attr('value',data.reqVO.frstRegisterId);
 			$('input[name=operImprvmRequstId]').attr('value',data.reqVO.operImprvmRequstId);
-			$('input[name=operJobSeCode]').attr('value',data.reqVO.operJobSeCode);
 			$('input[id=detailOperImprvmRequstSj]').attr('value',data.reqVO.operImprvmRequstSj); 
 			$('input[id=detailOperJobSecodeNm]').attr('value',data.reqVO.operJobSeCodeNm); 
 			$('input[id=detailComptRequstDe]').attr('value',data.reqVO.comptRequstDe); 
 			$('input[id=detailOperImprvmRequstCn]').attr('value',data.reqVO.operImprvmRequstCn);
 			
 			console.log(data.reqVO.requstTyCode);
-			//우선순위코드/유지보수 담당자
+			//업무구분/요청코드/우선순위코드/유지보수 담당자
+			$('input[name=operJobSeCode]').attr('value',data.reqVO.operJobSeCode);
 			$('input[name=requstTyCode]').attr('value',data.reqVO.requstTyCode);
 			$('input[name=emrgncyProcessAt]').attr('value',data.reqVO.emrgncyProcessAt);
 			$('input[name=chargerId]').attr('value',data.reqVO.chargerId);
@@ -109,20 +111,43 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 
 			fn_buttonShow_by_authorCode_and_sessionId();
 			
+			var testOperJobSeCode= data.operJobSeCode;
 			var testRequstTyCode= data.requstTyCode;
 			var testEmrgncyProcessAt= data.emrgncyProcessAt;
 			var testAuthorUser= data.authorUser;
-			var $selectrequstTyCode= $('#requstTyCode');
-			var $selectemrgncyProcessAt = $('#emrgncyProcessAt');
-			var $selectchargerId = $('#chargerId');
+			var $selectoperJobSeCode= $('#detailOperJobSecode');
+			var $selectrequstTyCode= $('#detailRequstTyCode');
+			var $selectemrgncyProcessAt = $('#detailEmrgncyProcessAt');
+			var $selectchargerId = $('#detailChargerId');
+			
+			console.log(testOperJobSeCode);
 
 			//콤보박스 옵션값 초기화
+				$selectoperJobSeCode.find('option').remove()
 				$selectrequstTyCode.find('option').remove();
 				$selectemrgncyProcessAt.find('option').remove();
 				$selectchargerId.find('option').remove();
+				$selectoperJobSeCode.append('<option value>--선택하세요--</option>')
 				$selectrequstTyCode.append('<option value>--선택하세요--</option>') 
 				$selectemrgncyProcessAt.append('<option value>--선택하세요--</option>') 
 			   	$selectchargerId.append('<option value>--선택하세요--</option>') 
+			   	
+			  	//업무구분
+			   		console.log("testOperJobSeCode : "+testOperJobSeCode);
+					$.each(testRequstTyCode, function(index, data){
+						var str;
+						console.log("업무구분 forEach  DB 값 :" +$('input[name=operJobSeCode]').val());
+						console.log("업무구분 forEach 비교할 값 :" +data.code);
+						str = "<option value=\'"+data.code+"\' ";
+					if($('input[name=operJobSeCode]').attr("value") == data.code) {
+						console.log("요청코드 if문에 들어오긴 하니?");
+					str += " selected";
+					}
+					str += ">"+data.codeNm+"</option>";
+					
+					$selectoperJobSeCode.append(str);
+					console.log("요청코드str :"+str);  
+					 });
 			   	
 			   	//요청코드
 			   		console.log("testRequstTyCode : "+testRequstTyCode);
@@ -141,7 +166,6 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 					console.log("요청코드str :"+str);  
 					 });
 				
-						
 				//긴급여부
 					console.log("testEmrgncyProcessAt : "+testEmrgncyProcessAt);
 					$.each(testEmrgncyProcessAt, function(index, data){
@@ -316,7 +340,7 @@ function fn_add_oper_improv_req() {
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
 		type:'POST',
 		data:operImprovReqVO,
-		success : function(responseData) {
+		success : function(data) {
 			alert("운영개선요청 게시글 들어갓다~~");
 		},
 		  error:function(request,status,error){
@@ -326,7 +350,45 @@ function fn_add_oper_improv_req() {
 	}); /* Ajax function */
 } /* fn_add_oper_process */
 
+/* 운영개선요청게시판에 게시글 등록하기 위한 폼(DB) 받기*/
+function fn_add_oper_improv_req_view() {
 
+	var url  = '/CMS/cms/ajax/addOperImprovReqView.do'
+
+	console.log(url);
+
+	$.ajax ({
+		url : url ,
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		success : function(data) {
+			
+			console.log(data);
+			
+			$('input[name=operJobSeCode]').attr('value',data.operJobSeCode.code);
+			var testOperJobSeCode= data.operJobSeCode;
+			var $selectoperJobSeCode= $('#detailOperJobSecode');
+			$selectoperJobSeCode.find('option').remove();
+			$selectoperJobSeCode.append('<option value>--선택하세요--</option>');
+			
+			//업무구분
+	   		console.log("testOperJobSeCode : "+testOperJobSeCode);
+			$.each(testOperJobSeCode, function(index, data){
+				var str;
+				console.log("업무구분 forEach  DB 값 :" +$('input[name=operJobSeCode]').val());
+				console.log("업무구분 forEach 비교할 값 :" +data.code);
+				str = "<option value=\'"+data.code+"\' ";
+				str += ">"+data.codeNm+"</option>";
+			
+			$selectoperJobSeCode.append(str);
+			 });
+			
+		},
+		  error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       }
+		
+	}); /* Ajax function */
+} /* fn_add_oper_process */
 
 function fn_buttonShow_by_authorCode_and_sessionId() {
 	var frstRegisterId = $("#deTailFrstRegisterid").attr("value");
@@ -338,6 +400,7 @@ function fn_buttonShow_by_authorCode_and_sessionId() {
 	
 	if(s_authorCode == 'ROLE_OPER_ADMIN' && frstRegisterId == s_mberId ) {
 		console.log("#1  "+s_authorCode);
+		
 		fn_view();
 		}else if(s_authorCode == 'ROLE_OPER_ADMIN' && frstRegisterId != s_mberId ) {
 			console.log("#2  "+s_authorCode);
@@ -346,7 +409,7 @@ function fn_buttonShow_by_authorCode_and_sessionId() {
 			console.log("#3  "+s_authorCode);
 			 fn_modify(); 
 		}else if( s_authorCode == 'ROLE_OPER_CHARGER' && frstRegisterId != s_mberId ) {
-			console.log("#4  "+s_authorCode);
+			console.log("#4  "+s_authorCode);		
 			fn_initBtn(true);
 		}
 }
@@ -359,14 +422,17 @@ function fn_close(reload) {
 	}
 }
 
-function fn_modify() {
+function fn_modify(add) {
 	$('#deleteBtn').attr('style','display: inline-block');
 	$('#modiBtn').attr('style','display: none'); 
 	$('.modiInput').attr('readonly',false);
 	$('.modiInput').attr('style','border: 1px');
 	$('#detailOperImprvmRequstCn').attr('style', 'height: 100%').attr('style', 'width: 100%');
-	$('#saveBtn').attr('style','display: inline-block'); 
-	
+	if(add) {
+		$("#addSaveBtn").attr('style','display:  lnline-block');
+	}else {
+		$('#updateSaveBtn').attr('style','display: inline-block');
+	}
 }
 
 function fn_view() {
@@ -375,25 +441,23 @@ function fn_view() {
 
 	$('#deleteBtn').attr('style','display: lnline-block'); 
 	$('#modiBtn').attr('style','display: lnline-block'); 
-	$('#saveBtn').attr('style','display: none');
+	$('#updateSaveBtn').attr('style','display: none');
+}
 
+function fn_save() {
+	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();
+
+	if(operImprvmRequstId == null || operImprvmRequstId.equals('') ){
+		initBtn();
+		$("#addSaveBtn").attr('style','display:  lnline-block');
+	}
 }
 
 function fn_initBtn(author) {
 	$('#deleteBtn').attr('style','display: none');
 	$('#modiBtn').attr('style','display: none'); 
-	$('#saveBtn').attr('style','display: none'); 
+	$('#updateSaveBtn').attr('style','display: none'); 
 	if(author) {
 		$('#detailProcess').attr('readonly',false);
 	}
-	
-function fn_procBtn() {
-	location.reload();
-/*	$('#foo').trigger('click');
-*/	
-}
-/*function fn_regist() {
-	funtion fn_modify();
-	}*/
-
 }

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,6 +25,7 @@ import egovframework.oe1.cms.srm.service.impl.EgovOe1OperImprovReqDAO;
 import egovframework.oe1.cms.sys.service.EgovOe1AuthorGroupVO;
 import egovframework.oe1.cms.sys.service.impl.EgovOe1AuthorGroupDAO;
 import egovframework.oe1.cms.sys.service.impl.EgovOe1BBSManageDAO;
+import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
 
 @Controller
@@ -37,14 +40,13 @@ public class AjaxController {
 	private EgovOe1OperImprovReqDAO operImprovReqDAO;
 	
 	// EgovOe1OperImprovReqDAO
-	// 요청구분코드/긴급처리여부를 갖고 오기 위해.
+	// 요청구분코드/긴급처리여부/업무구분 을 갖고 오기 위해.
 	@Resource(name="cmmUseDAO")
 	private EgovOe1CmmUseDAO cmmUseDAO;
 	
 	// EgovOe1AuthorGroupDAO
 	@Resource(name="egovOe1AuthorGroupDAO")
 	private EgovOe1AuthorGroupDAO egovOe1AuthorGroupDAO;
-
 	
 	/* 선택된 운영개선요청 글과 조치이력을 레이어팝업(모달)로 가져오기. */
 	 @RequestMapping(value="/cms/ajax/findOperImprovReqest.do", method=RequestMethod.GET)
@@ -62,13 +64,18 @@ public class AjaxController {
 		EgovOe1OperImprovReqVO reqVO = operImprovReqDAO.selectOperImprovReq(operImprovReqVO);
 		map.put("reqVO", reqVO);
 		
+		 //업무구분코드
+        EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
+        vo1.setCodeId("OE1020");
+        List srTrgetCode_result3 = cmmUseDAO.selectCmmCodeDetail(vo1);
+        map.put("operJobSeCode", srTrgetCode_result3);
+		
 	      //요청구분코드
         //조회. 즉, 처리정보를 변경할 수 있다. 셀렉트 태그를 사용하기 위해 리스트를 가져오는 것 같음.
         EgovOe1ComDefaultCodeVO codeVo1 = new EgovOe1ComDefaultCodeVO();
         codeVo1.setCodeId("OE1012");
         List srTrgetCode_result1 = cmmUseDAO.selectCmmCodeDetail(codeVo1);
         map.put("requstTyCode", srTrgetCode_result1);
-	
 
         //긴급처리여부
         //조회. 즉, 처리정보를 변경할 수 있다. 셀렉트 태그를 사용하기 위해 리스트를 가져오는 것 같음.
@@ -325,7 +332,44 @@ public class AjaxController {
 		ObjectMapper mapper = new ObjectMapper();
 		
 		boolean aaa = true;
-		 response.getWriter().print(mapper.writeValueAsString(aaa));		 
+		 response.getWriter().print(mapper.writeValueAsString(aaa));		
+	 }
+	 
+/*	 @RequestMapping(value = "/cms/srm/gnrl/addOperImprovReqView.do")
+		public String insertOperImprovReqView(
+				@ModelAttribute("vo") EgovOe1OperImprovReqVO vo, ModelMap model) throws Exception {
+			//model.addAttribute("operImprovReqVO", new EgovOe1OperImprovReqVO());
+			//검색조건
+	        model.addAttribute("searchVO", vo);
+	        
+	    	//업무구분
+	        EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
+	        vo1.setCodeId("OE1020");
+	        List srTrgetCode_result1 = egovCmmUseService.selectCmmCodeDetail(vo1);
+	        model.addAttribute("operJobSeCode", srTrgetCode_result1);	
+			
+			return "cms/srm/EgovOperImprovReqRegist";
+		}*/
+	 
+	 /* 운영개선요청게시판에 게시글 등록하기 위한 폼(DB) 받기*/
+	 @RequestMapping("/cms/ajax/addOperImprovReqView.do")
+	 public  @ResponseBody Map<String, Object> addOperImprovReqView() throws Exception  {
+		
+		 System.out.println("#. AjaxController - addOperImprovReqView.do  - START!!!");
+		 
+		Map<String, Object> map = new HashMap<String, Object>();
 
+		//검색조건
+       /* model.addAttribute("searchVO", vo);*/
+        
+	 //업무구분코드
+        EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
+        vo1.setCodeId("OE1020");
+        List srTrgetCode_result3 = cmmUseDAO.selectCmmCodeDetail(vo1);
+        map.put("operJobSeCode", srTrgetCode_result3);
+        
+        System.out.println("#. AjaxController - addOperImprovReqView.do  - END!!!");
+        
+        return map;
 	 }
 }
