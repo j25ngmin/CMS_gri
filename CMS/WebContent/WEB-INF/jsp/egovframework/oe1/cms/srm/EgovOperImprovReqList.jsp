@@ -433,7 +433,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	<!-- 글 등록할때 자동으로 요청자가 입력되기 위해 -->
 	<input type="hidden" name="s_mberNm" id="s_mberNm" value="${sessionScope.s_mberNm}"/>
 	
-	
+	<input type="hidden" name="requstTyCode" id="requstTyCode"  value="" />
 	<input type="hidden" name="emrgncyProcessAt" id="emrgncyProcessAt" value="" />
 	<input type="hidden" name="chargerId" id="chargerId"  value="" />
 

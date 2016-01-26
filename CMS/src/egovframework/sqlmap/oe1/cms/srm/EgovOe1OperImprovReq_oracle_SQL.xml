@@ -251,6 +251,7 @@
 	</insert> 
 	
 <!-- 운영개선요청 수정 -->
+
 	<update id="operImprovReqDAO.updateOperImprovReq">
 			UPDATE OE1TNOPERIMPROVREQ
 			SET
@@ -261,6 +262,9 @@
 				   ,REQUST_ATCH_FILE_ID    = #requstAtchFileId#           
 				   ,LAST_UPDUSR_PNTTM      = SYSDATE  
 				   ,LAST_UPDUSR_ID         = #lastUpdusrId#     
+					,REQUST_TY_CODE    =   #requstTyCode#  
+					,EMRGNCY_PROCESS_AT  =#emrgncyProcessAt# 
+					,CHARGER_ID      =   #chargerId# 
 			WHERE  OPER_IMPRVM_REQUST_ID   = #operImprvmRequstId#		
 	</update>
 	

@@ -53,6 +53,8 @@ public class AjaxController {
 		Map<String, Object> map = new HashMap<String, Object>();
 		 
 		System.out.println("AjaxController - findOperImprovReqest - START!!!");
+		 System.out.println("findOperImprovReqest::: 받아온 파라메터 : "+operImprovReqVO);
+
 		
 		//검색조건
 //		model.addAttribute("searchVO", vo);
@@ -133,8 +135,10 @@ public class AjaxController {
 	 public  void updateOperImprovReqest(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status, HttpServletResponse response)throws Exception  {
 		
 		 System.out.println("AjaxController - updateSelectOperImprovReqest - START!!!");
-		
-		System.out.println("받아온 파라메터 값 BEFORE : "+operImprovReqVO);
+	
+		System.out.println("updateOperImprovReqest ::: 받아온 파라메터 값 BEFORE : "+operImprovReqVO);
+		System.out.println("updateOperImprovReqest ::: 자세히 찍어보자! : "+operImprovReqVO.getOperImprvmRequstSj()+"//"+operImprovReqVO.getRequstTyCode()+"//"+operImprovReqVO.getEmrgncyProcessAt()+"//"+operImprovReqVO.getChargerId());
+
 		 
 //		우선 보류.
 //		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
@@ -149,6 +153,8 @@ public class AjaxController {
 //		model.addAttribute("searchVO", vo);
 		
 		operImprovReqDAO.updateOperImprovReq(operImprovReqVO);
+
+		System.out.println("updateOperImprovReqest :::받아온 파라메터 값 AFTER : "+operImprovReqVO);
 
 		System.out.println("AjaxController - updateSelectOperImprovReqest  - END!!!");
 		

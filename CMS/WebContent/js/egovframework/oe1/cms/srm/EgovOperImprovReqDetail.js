@@ -90,17 +90,18 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$('input[id=detailComptRequstDe]').attr('value',data.reqVO.comptRequstDe); 
 			$('input[id=detailOperImprvmRequstCn]').attr('value',data.reqVO.operImprvmRequstCn);
 			
+			console.log(data.reqVO.requstTyCode);
 			//우선순위코드/유지보수 담당자
-			$('input[name=emrgncyProcessAt]').attr('value',data.emrgncyProcessAt.code);
-			$('input[name=chargerId]').attr('value',data.reqVO.operImprvmRequstCn);
-			
+			$('input[name=requstTyCode]').attr('value',data.reqVO.requstTyCode);
+			$('input[name=emrgncyProcessAt]').attr('value',data.reqVO.emrgncyProcessAt);
+			$('input[name=chargerId]').attr('value',data.reqVO.chargerId);
 			
 			//조치이력 List
 			var processList= data.processList;
 			var $processList= $('#processList');
-			
+			//조치이력 초기화
 			$processList.empty();
-			
+			//조치이력 List 돌기
 			   $.each(processList, function(index, data){
 				   $processList.append("<tr><td>"+data.operProcessDate+"<br>"+
 						   data.operProcessCn+"</td></tr>");
@@ -122,26 +123,60 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 				$selectrequstTyCode.append('<option value>--선택하세요--</option>') 
 				$selectemrgncyProcessAt.append('<option value>--선택하세요--</option>') 
 			   	$selectchargerId.append('<option value>--선택하세요--</option>') 
-			  
-			//콤보박스 옵션값 세팅
-			   $.each(testRequstTyCode, function(index, data){
-				 console.log(data.code+" : "+data.codeNm);
-				 $selectrequstTyCode.append('<option value='+data.code+'>'+data.codeNm+'</option>');
-			   });	
+			   	
+			   	//요청코드
+			   		console.log("testRequstTyCode : "+testRequstTyCode);
+					$.each(testRequstTyCode, function(index, data){
+						var str;
+						console.log("요청코드 forEach  DB 값 :" +$('input[name=requstTyCode]').val());
+						console.log("요청코드 forEach 비교할 값 :" +data.code);
+						str = "<option value=\'"+data.code+"\' ";
+					if($('input[name=requstTyCode]').attr("value") == data.code) {
+						console.log("요청코드 if문에 들어오긴 하니?");
+					str += " selected";
+					}
+					str += ">"+data.codeNm+"</option>";
+					
+					$selectrequstTyCode.append(str);
+					console.log("요청코드str :"+str);  
+					 });
 				
-			 /*$.each(testEmrgncyProcessAt, function(index, data){
-				 $selectemrgncyProcessAt.append('<option value='+data.code+
-						if($('input[name=emrgncyProcessAt]').attr("value") == testEmrgncyProcessAt) {
-							selected="selected";
-							}
-				+'>'+data.codeNm+'</option>');
-			   });	*/
-			 
-			 console.log(testAuthorUser);
-			 $.each(testAuthorUser, function(index, data){
-			 $selectchargerId.append('<option value='+data.mberId+'>'+data.mberNm+'('+data.moblphonNo+','+data.mberEmailAdres+')</option>');
-			   });	
-			
+						
+				//긴급여부
+					console.log("testEmrgncyProcessAt : "+testEmrgncyProcessAt);
+					$.each(testEmrgncyProcessAt, function(index, data){
+					var str;
+					console.log("긴급여부 forEach  DB 값 :" +$('input[name=emrgncyProcessAt]').val());
+					console.log("긴급여부 forEach 비교할 값 :" +data.code);
+					str = "<option value=\'"+data.code+"\' ";
+					if($('input[name=emrgncyProcessAt]').attr("value") == data.code) {
+						console.log("긴급여부 if문에 들어오긴 하니?");
+
+						str += " selected";
+					}
+					str += ">"+data.codeNm+"</option>";
+					
+					 $selectemrgncyProcessAt.append(str);
+					 console.log("긴급여부str :"+str); 
+					   });
+				
+					//담당자
+					console.log("testAuthorUser : "+testAuthorUser);
+					$.each(testAuthorUser, function(index, data){
+						var str;
+						console.log("담당자 forEach  DB 값 :" +$('input[name=chargerId]').val());
+						console.log("담당자 forEach 비교할 값 :" +data.mberId);
+						str = "<option value=\'"+data.mberId+"\' ";
+						if($('input[name=chargerId]').attr("value") == data.mberId) {
+							console.log("담당자 if문에 들어오긴 하니?");
+
+							str += "  selected";
+						}
+						str += ">"+data.mberNm+"("+data.moblphonNo+','+data.mberEmailAdres+")</option>";
+					
+						$selectchargerId.append(str);
+						console.log("담당자str :"+str); 
+						   });
 		},
 		
 	  error:function(request,status,error){
@@ -151,6 +186,7 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 	}); /* Ajax function */
 	str = "";
 } /* fn_egov_inqire_notice  */
+
 
 /* 운영개선요청 수정한 내용을 저장하기. */
 function fn_update_oper_improv_req() {
