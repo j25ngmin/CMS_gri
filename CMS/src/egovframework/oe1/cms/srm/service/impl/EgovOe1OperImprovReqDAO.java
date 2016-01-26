@@ -18,10 +18,13 @@ package egovframework.oe1.cms.srm.service.impl;
 
 import java.util.List;
 
+import javax.annotation.Resource;
+
 import org.springframework.stereotype.Repository;
 
 import egovframework.oe1.cms.srm.service.EgovOe1OperImprovReqVO;
 import egovframework.oe1.cms.srm.service.EgovOe1OperProcessVO;
+import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
 
@@ -42,6 +45,8 @@ import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
  * </pre>
  */ 
 
+
+
 @Repository("operImprovReqDAO")
 public class EgovOe1OperImprovReqDAO extends EgovAbstractDAO {
 
@@ -56,7 +61,8 @@ public class EgovOe1OperImprovReqDAO extends EgovAbstractDAO {
 	 * @exception Exception
 	 */
     public String insertOperImprovReq(EgovOe1OperImprovReqVO vo) throws Exception {
-        return (String)insert("operImprovReqDAO.insertOperImprovReq", vo);
+        
+    	return (String)insert("operImprovReqDAO.insertOperImprovReq", vo);
     }
 
     /**

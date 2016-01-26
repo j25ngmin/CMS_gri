@@ -320,10 +320,10 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
        <tr>
           <th scope="row">업무구분</th>
           <td>
-          	<select name="operJobSeCode" id="detailOperJobSecode" title="업무구분" tabindex="2"></select>
+          	<select class="modiSelect" name="operJobSeCode" id="detailOperJobSecode" title="업무구분" tabindex="2"  ></select>
           </td>
 		  <th scope="row">완료요청일</th>
-          <td><input type="text"  class="modiInput" id="detailComptRequstDe" name="comptRequstDe" value="" readonly></td>
+          <td><input type="text"  class="modiInput" id="detailComptRequstDe" name="comptRequstDe" value="" ></td>
         </tr>
         <tr>
           <th scope="row">요청내용</th>
@@ -336,7 +336,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">요청구분</th>
 	         <td>
-		        	<select name="requstTyCode" id="detailRequstTyCode" title="요청구분" tabindex="1">
+		        	<select class="modiSelect"  name="requstTyCode" id="detailRequstTyCode" title="요청구분" tabindex="1">
 		   <!-- 	<select name="requstTyCode" id="requstTyCode" title="요청구분" tabindex="1" <c:if test="${vo.requstSttusCode != '01'&& vo.requstSttusCode != '02' }">disabled="disabled"</c:if>>  -->
 		        	
 		           	<!-- c:forEach var="codeinfo" items="${requstTyCode}" varStatus="status" -->
@@ -344,7 +344,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 		          	</select>	
 		     </td>
 	           <th scope="row">긴급</th>
-	         <td><select name="emrgncyProcessAt" id="detailEmrgncyProcessAt" title="긴급처리여부" tabindex="2" >
+	         <td><select class="modiSelect"  name="emrgncyProcessAt" id="detailEmrgncyProcessAt" title="긴급처리여부" tabindex="2" >
 	   <!--  <td><select name="emrgncyProcessAt" id="emrgncyProcessAt" title="긴급처리여부" tabindex="2" <c:if test="${vo.requstSttusCode != '01'&& vo.requstSttusCode != '02' }">disabled="disabled"</c:if>>  -->  
 	           
 	           	<!-- c:forEach var="codeinfo" items="${emrgncyProcessAt}" varStatus="status" -->
@@ -356,7 +356,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">담당자</th>
 	        <td>
-				<select name="chargerId" id="detailChargerId" title="담당자" tabindex="3">
+				<select class="modiSelect"  name="chargerId" id="detailChargerId" title="담당자" tabindex="3">
 		<!-- 	<select name="chargerId" id="chargerId" title="담당자" tabindex="3" <c:if test="${vo.requstSttusCode != '01'&& vo.requstSttusCode != '02' }">disabled="disabled"</c:if>>  -->	
 	  		<!-- c:forEach var="authorUser" items="${authorUser}" varStatus="status -->
 	   <!--   <option value='${authorUser.mberId}' <c:if test="${vo.chargerId == authorUser.mberId}">selected="selected"</c:if>>${authorUser.mberNm} [${authorUser.mberId}]</option>   -->   

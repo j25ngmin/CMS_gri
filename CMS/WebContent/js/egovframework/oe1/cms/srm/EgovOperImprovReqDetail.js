@@ -438,6 +438,9 @@ function fn_modify(add) {
 function fn_view() {
 	$('.modiInput').attr('style','border: 0px');
 	$('.modiInput').attr('readonly',true);
+	console.log("경기연구원담당자.");
+	$('.modiSelect').attr('onFocus','this.initialSelect = this.selectedIndex;');
+	$('.modiSelect').attr('onChange', 'this.selectedIndex = this.initialSelect;');
 
 	$('#deleteBtn').attr('style','display: lnline-block'); 
 	$('#modiBtn').attr('style','display: lnline-block'); 

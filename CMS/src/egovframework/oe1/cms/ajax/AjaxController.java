@@ -25,6 +25,7 @@ import egovframework.oe1.cms.srm.service.impl.EgovOe1OperImprovReqDAO;
 import egovframework.oe1.cms.sys.service.EgovOe1AuthorGroupVO;
 import egovframework.oe1.cms.sys.service.impl.EgovOe1AuthorGroupDAO;
 import egovframework.oe1.cms.sys.service.impl.EgovOe1BBSManageDAO;
+import egovframework.rte.fdl.idgnr.EgovIdGnrService;
 import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
 
@@ -47,6 +48,13 @@ public class AjaxController {
 	// EgovOe1AuthorGroupDAO
 	@Resource(name="egovOe1AuthorGroupDAO")
 	private EgovOe1AuthorGroupDAO egovOe1AuthorGroupDAO;
+	
+	/**
+	 * IdGeneration
+	 */
+	@Resource(name="egovOperImprovReqIdGnrService")
+	private EgovIdGnrService operImprovReqIdGnrService;
+	
 	
 	/* 선택된 운영개선요청 글과 조치이력을 레이어팝업(모달)로 가져오기. */
 	 @RequestMapping(value="/cms/ajax/findOperImprovReqest.do", method=RequestMethod.GET)
@@ -325,7 +333,14 @@ public class AjaxController {
 		 }
 		 vo.setRequstAtchFileId(_atchFileId);  */
 		 
-		operImprovReqDAO.insertOperImprovReq(operImprovReqVO);
+		/** ID Generation Service */
+    	String id = operImprovReqIdGnrService.getNextStringId();
+    	
+    	operImprovReqVO.setOperImprvmRequstId(id);
+    	
+    	System.out.println("여기서 오류가 나나"+operImprovReqVO);
+    	
+    	operImprovReqDAO.insertOperImprovReq(operImprovReqVO);    	
 		
 //		status.setComplete();
 		
