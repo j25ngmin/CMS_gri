@@ -12,7 +12,6 @@
   * @JSP Name : EgovOperImprovReqList.jsp
   * @Description : 운영개선요청 List 화면
   * @Modification Information
-  * 
   *   수정일         수정자                   수정내용
   *  -------    --------    ---------------------------
   *  2010.07.20  박수림         최초 생성
@@ -389,19 +388,17 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
         		</table>
         	</td>
         </tr>
-          <tr >
-          <th scope="row">조치결과</th>
-          <td colspan="3">
-          
-<!--           <input type="text"  class="modiInput" id="detailProcessComptDe" name="processComptDe" value="" readonly>
- -->          <input type="text"  class="modiInput" id="detailProcessCn" name="processCn" value=""  readonly> 
-         	  <c:if test="${  ! empty sessionScope.s_authorCode && sessionScope.s_authorCode != NULL }" > 
+          <c:if test="${  ! empty sessionScope.s_authorCode && sessionScope.s_authorCode != NULL }" > 
          	 	 <c:if test="${ (sessionScope.s_authorCode) == 'ROLE_ADMIN' || (sessionScope.s_authorCode) =='ROLE_OPER_CHARGER'}" >
-     	 			 <button type="button" class="btn btn-primary" id="fn_procBtn();"onclick="fn_add_oper_process()">조치</button>
-          		 </c:if>
-          	 </c:if>
+          <tr >
+          <th scope="row">조치하기</th>
+          <td colspan="3">
+   			    <input type="text"  class="modiInput" id="detailProcessCn" name="processCn" value=""  readonly> 
+     	 		<button type="button" class="btn btn-primary" id="fn_procBtn();"onclick="fn_add_oper_process()">조치</button>
           </td>
         </tr>
+         </c:if>
+          	 </c:if>
         <!-- 
         <tr>
          <th scope="row">조치결과</th>
@@ -433,6 +430,10 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	<input type="hidden" name="s_mberId" id="s_mberId" value="${sessionScope.s_mberId}"/>
 	<input type="hidden" name="s_authorCode" id="s_authorCode" value="${sessionScope.s_authorCode}" />
 	
+	<!-- 글 등록할때 자동으로 요청자가 입력되기 위해 -->
+	<input type="hidden" name="s_mberNm" id="s_mberNm" value="${sessionScope.s_mberNm}"/>
+	
+	
 	<input type="hidden" name="emrgncyProcessAt" id="emrgncyProcessAt" value="" />
 	<input type="hidden" name="chargerId" id="chargerId"  value="" />
 
@@ -445,7 +446,6 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 		<form:hidden path="pageIndex" />
 	</div>	
   	<div class="subbtn_align">  		
-	  	<ul>
   			<li class="btn02_le`ftbg"></li>
 <%-- 		    <li class="btn02_middlebg"><a href="<c:url value='/cms/srm/gnrl/addOperImprovReqView.do'/>" onclick="fn_egov_addView(); return false;" class="btn_link">등록</a></li>
  --%>			 <li class="btn02_middlebg"><a data-toggle="modal" data-target="#detail_improv_request"  id="regBtn" class="btn_link">등록</a></li>		

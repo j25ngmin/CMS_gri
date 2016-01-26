@@ -19,6 +19,9 @@ $(document).ready(function() {
 	$("#regBtn").click(function(event){
 		alert("regBtn 클릭 시 실행되는 제이쿼리 함수.");
 		fn_modify();
+		$("#detailFrstRegisterNm").html($("#s_mberNm").val());
+		$("#detailFrstRegisterPnttm").html($("#detailProcessComptDe").val());
+		
 	});
 
 		
@@ -249,6 +252,10 @@ function fn_add_oper_process() {
 		},
 		success : function(responseData) {
 			alert("조치결과 들어갓다~~");
+			fn_find_oper_improv_req(operImprvmRequstId);
+			$("#detailProcessCn").attr("value", ' ');
+			
+
 		},
 		  error:function(request,status,error){
 		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -329,10 +336,11 @@ function fn_modify() {
 function fn_view() {
 	$('.modiInput').attr('style','border: 0px');
 	$('.modiInput').attr('readonly',true);
-	
+
 	$('#deleteBtn').attr('style','display: lnline-block'); 
 	$('#modiBtn').attr('style','display: lnline-block'); 
 	$('#saveBtn').attr('style','display: none');
+
 }
 
 function fn_initBtn(author) {
