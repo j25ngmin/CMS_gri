@@ -400,7 +400,6 @@ function fn_buttonShow_by_authorCode_and_sessionId() {
 	
 	if(s_authorCode == 'ROLE_OPER_ADMIN' && frstRegisterId == s_mberId ) {
 		console.log("#1  "+s_authorCode);
-		
 		fn_view();
 		}else if(s_authorCode == 'ROLE_OPER_ADMIN' && frstRegisterId != s_mberId ) {
 			console.log("#2  "+s_authorCode);
@@ -436,6 +435,7 @@ function fn_modify(add) {
 }
 
 function fn_view() {
+	console.log("??????????????.");
 	$('.modiInput').attr('style','border: 0px');
 	$('.modiInput').attr('readonly',true);
 	console.log("경기연구원담당자.");
