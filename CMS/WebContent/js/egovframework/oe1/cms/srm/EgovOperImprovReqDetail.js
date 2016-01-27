@@ -115,100 +115,46 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			var testRequstTyCode= data.requstTyCode;
 			var testEmrgncyProcessAt= data.emrgncyProcessAt;
 			var testAuthorUser= data.authorUser;
-			var $selectoperJobSeCode= $('#detailOperJobSecode');
+			var $selectoperJobSeCode= $('#detailOperJobSecode')
 			var $selectrequstTyCode= $('#detailRequstTyCode');
 			var $selectemrgncyProcessAt = $('#detailEmrgncyProcessAt');
 			var $selectchargerId = $('#detailChargerId');
 			
-			console.log(testOperJobSeCode);
 
-			//콤보박스 옵션값 초기화
-				$selectoperJobSeCode.find('option').remove()
-				$selectrequstTyCode.find('option').remove();
-				$selectemrgncyProcessAt.find('option').remove();
-				$selectchargerId.find('option').remove();
-				$selectoperJobSeCode.append('<option value>--선택하세요--</option>')
-				$selectrequstTyCode.append('<option value>--선택하세요--</option>') 
-				$selectemrgncyProcessAt.append('<option value>--선택하세요--</option>') 
-			   	$selectchargerId.append('<option value>--선택하세요--</option>') 
-			   	
 			  	//업무구분
-			   		console.log("testOperJobSeCode : "+testOperJobSeCode);
-					$.each(testRequstTyCode, function(index, data){
-						var str;
-						console.log("업무구분 forEach  DB 값 :" +$('input[name=operJobSeCode]').val());
-						console.log("업무구분 forEach 비교할 값 :" +data.code);
-						str = "<option value=\'"+data.code+"\' ";
-					if($('input[name=operJobSeCode]').attr("value") == data.code) {
-						console.log("요청코드 if문에 들어오긴 하니?");
-					str += " selected";
-					}
-					str += ">"+data.codeNm+"</option>";
-					
-					$selectoperJobSeCode.append(str);
-					console.log("요청코드str :"+str);  
-					 });
+					$.each($('#detailOperJobSecode').length, function(index, i){
+					if($('#detailOperJobSecode').option[i] == data.operJobSeCode.code ) {
+						$('#detailOperJobSecode').option[i].selected = 'selected';
+						}
+					});
 			   	
 			   	//요청코드
-			   		console.log("testRequstTyCode : "+testRequstTyCode);
-					$.each(testRequstTyCode, function(index, data){
-						var str;
-						console.log("요청코드 forEach  DB 값 :" +$('input[name=requstTyCode]').val());
-						console.log("요청코드 forEach 비교할 값 :" +data.code);
-						str = "<option value=\'"+data.code+"\' ";
-					if($('input[name=requstTyCode]').attr("value") == data.code) {
-						console.log("요청코드 if문에 들어오긴 하니?");
-					str += " selected";
-					}
-					str += ">"+data.codeNm+"</option>";
-					
-					$selectrequstTyCode.append(str);
-					console.log("요청코드str :"+str);  
-					 });
+				$.each($('#detailRequstTyCode').length, function(index, i){
+					if($('#detailRequstTyCode').option[i] == data.requstTyCode.code ) {
+						$('#detailRequstTyCode').option[i].selected = 'selected';
+						}
+					});
 				
 				//긴급여부
-					console.log("testEmrgncyProcessAt : "+testEmrgncyProcessAt);
-					$.each(testEmrgncyProcessAt, function(index, data){
-					var str;
-					console.log("긴급여부 forEach  DB 값 :" +$('input[name=emrgncyProcessAt]').val());
-					console.log("긴급여부 forEach 비교할 값 :" +data.code);
-					str = "<option value=\'"+data.code+"\' ";
-					if($('input[name=emrgncyProcessAt]').attr("value") == data.code) {
-						console.log("긴급여부 if문에 들어오긴 하니?");
-
-						str += " selected";
-					}
-					str += ">"+data.codeNm+"</option>";
-					
-					 $selectemrgncyProcessAt.append(str);
-					 console.log("긴급여부str :"+str); 
-					   });
-				
-					//담당자
-					console.log("testAuthorUser : "+testAuthorUser);
-					$.each(testAuthorUser, function(index, data){
-						var str;
-						console.log("담당자 forEach  DB 값 :" +$('input[name=chargerId]').val());
-						console.log("담당자 forEach 비교할 값 :" +data.mberId);
-						str = "<option value=\'"+data.mberId+"\' ";
-						if($('input[name=chargerId]').attr("value") == data.mberId) {
-							console.log("담당자 if문에 들어오긴 하니?");
-
-							str += "  selected";
+				$.each($('#detailEmrgncyProcessAt').length, function(index, i){
+					if($('#detailEmrgncyProcessAt').option[i] == data.emrgncyProcessAt.code ) {
+						$('#detailEmrgncyProcessAt').option[i].selected = 'selected';
 						}
-						str += ">"+data.mberNm+"("+data.moblphonNo+','+data.mberEmailAdres+")</option>";
+					});
 					
-						$selectchargerId.append(str);
-						console.log("담당자str :"+str); 
-						   });
+					//담당자
+					$.each($('#detailChargerId').length, function(index, i){
+						if($('#detailChargerId').option[i] == data.emrgncyProcessAt.code ) {
+							$('#detailChargerId').option[i].selected = 'selected';
+						}
+					});
 		},
-		
-	  error:function(request,status,error){
+		error:function(request,status,error){
 	        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	       }
 
 	}); /* Ajax function */
-	str = "";
+
 } /* fn_egov_inqire_notice  */
 
 

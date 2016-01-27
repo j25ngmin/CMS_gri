@@ -320,7 +320,13 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
        <tr>
           <th scope="row">업무구분</th>
           <td>
-          	<select class="modiSelect" name="operJobSeCode" id="detailOperJobSecode" title="업무구분" tabindex="2"  ></select>
+         	<select name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
+         		<c:set var="${compareOperJobSeCode}"  value=""/>
+	          	<option value='' >--선택하세요--</option>
+	           	<c:forEach var="codeinfo" items="${operJobSeCode}" varStatus="status">
+	            <option value='${codeinfo.code}'>${codeinfo.codeNm}</option>
+			  	</c:forEach>  
+	          	</select>
           </td>
 		  <th scope="row">완료요청일</th>
           <td><input type="text"  class="modiInput" id="detailComptRequstDe" name="comptRequstDe" value="" ></td>
@@ -336,31 +342,31 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">요청구분</th>
 	         <td>
-		        	<select class="modiSelect"  name="requstTyCode" id="detailRequstTyCode" title="요청구분" tabindex="1">
-		   <!-- 	<select name="requstTyCode" id="requstTyCode" title="요청구분" tabindex="1" <c:if test="${vo.requstSttusCode != '01'&& vo.requstSttusCode != '02' }">disabled="disabled"</c:if>>  -->
-		        	
-		           	<!-- c:forEach var="codeinfo" items="${requstTyCode}" varStatus="status" -->
-				  	<!-- /c:forEach  -->  
-		          	</select>	
+		     <select name="requstTyCode" id="deTailRequstTyCode" title="요청구분" tabindex="1">
+	          	<option value='' >--선택하세요--</option>
+	           	<c:forEach var="codeinfo" items="${requstTyCode}" varStatus="status">
+	            <option value='${codeinfo.code}' <c:if test="${vo.requstTyCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
+			  	</c:forEach>  
+	          	</select>			
 		     </td>
 	           <th scope="row">긴급</th>
-	         <td><select class="modiSelect"  name="emrgncyProcessAt" id="detailEmrgncyProcessAt" title="긴급처리여부" tabindex="2" >
-	   <!--  <td><select name="emrgncyProcessAt" id="emrgncyProcessAt" title="긴급처리여부" tabindex="2" <c:if test="${vo.requstSttusCode != '01'&& vo.requstSttusCode != '02' }">disabled="disabled"</c:if>>  -->  
-	           
-	           	<!-- c:forEach var="codeinfo" items="${emrgncyProcessAt}" varStatus="status" -->
-	         <!--  <option value='${codeinfo.code}' <c:if test="${vo.emrgncyProcessAt == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>  -->  
-			  	<!-- /c:forEach -->  
-	          	</select>
+	           <td>
+			      <select name="emrgncyProcessAt" id="DetailEmrgncyProcessAt" title="긴급처리여부" tabindex="2">
+		          	<option value='' >--선택하세요--</option>
+		           	<c:forEach var="codeinfo" items="${emrgncyProcessAt}" varStatus="status">
+		            <option value='${codeinfo.code}' <c:if test="${vo.emrgncyProcessAt == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
+				  	</c:forEach>  
+		          </select>		
 	         </td>
         </tr>
          <tr class="no_regist">
 	          <th scope="row">담당자</th>
 	        <td>
-				<select class="modiSelect"  name="chargerId" id="detailChargerId" title="담당자" tabindex="3">
-		<!-- 	<select name="chargerId" id="chargerId" title="담당자" tabindex="3" <c:if test="${vo.requstSttusCode != '01'&& vo.requstSttusCode != '02' }">disabled="disabled"</c:if>>  -->	
-	  		<!-- c:forEach var="authorUser" items="${authorUser}" varStatus="status -->
-	   <!--   <option value='${authorUser.mberId}' <c:if test="${vo.chargerId == authorUser.mberId}">selected="selected"</c:if>>${authorUser.mberNm} [${authorUser.mberId}]</option>   -->   
-			  	<!-- /c:forEach  -->  
+			<select name="chargerId" id="deTailChargerId" title="담당자" tabindex="3">
+	          	<option value='' >--선택하세요--</option>
+	           	<c:forEach var="authorUser" items="${authorUser}" varStatus="status">
+	            <option value='${authorUser.mberId}' <c:if test="${vo.chargerId == authorUser.mberId}">selected="selected"</c:if>>${authorUser.mberNm} [${authorUser.mberId}]</option>
+			  	</c:forEach>  
 	          	</select>
 	          	<!--  
 				<input type="hidden" name="url" value="/oe1/cms/com/EgovOe1AuthorUserPopup.do" />

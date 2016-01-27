@@ -46,9 +46,10 @@ import egovframework.oe1.cms.com.service.EgovOe1FileVO;
 import egovframework.oe1.cms.com.service.EgovOe1LoginVO;
 import egovframework.oe1.cms.com.service.EgovOe1MessageSource;
 import egovframework.oe1.cms.com.service.EgovOe1CmmUseService;
-
 import egovframework.oe1.cms.srm.service.EgovOe1OperImprovReqService;
 import egovframework.oe1.cms.srm.service.EgovOe1OperImprovReqVO;
+import egovframework.oe1.cms.sys.service.EgovOe1AuthorGroupService;
+import egovframework.oe1.cms.sys.service.EgovOe1AuthorGroupVO;
 import egovframework.oe1.cms.sys.service.EgovOe1UserManageService;
 import egovframework.oe1.cms.sys.service.EgovOe1UserManageVO;
 
@@ -99,6 +100,10 @@ public class EgovOe1OperImprovReqController {
     @Resource(name = "egovOe1UserManageService")
     private EgovOe1UserManageService userManageService;    
     
+    /** egovAuthorGroupService */
+    @Resource(name = "egovOe1AuthorGroupService")
+    private EgovOe1AuthorGroupService egovAuthorGroupService;
+    
     /** EgovFileMngUtil */
     @Resource(name="EgovFileMngUtil")
     private EgovOe1FileMngUtil fileUtil;	
@@ -127,13 +132,13 @@ public class EgovOe1OperImprovReqController {
 			) throws Exception {
 		//검색조건
         model.addAttribute("searchVO", vo);
-		//상태
+		//search상태
         EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
         vo1.setCodeId("OE1023");
         List srTrgetCode_result1 = egovCmmUseService.selectCmmCodeDetailForAll(vo1);
         model.addAttribute("srequstSttusCode", srTrgetCode_result1);
 		
-    	//업무구분
+    	//search 업무구분
         EgovOe1ComDefaultCodeVO vo2 = new EgovOe1ComDefaultCodeVO();
         vo2.setCodeId("OE1020");
         List srTrgetCode_result2 = egovCmmUseService.selectCmmCodeDetailForAll(vo2);
@@ -152,6 +157,33 @@ public class EgovOe1OperImprovReqController {
 		vo.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		vo.setLastIndex(paginationInfo.getLastRecordIndex());
 		vo.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
+		
+		//업무구분
+        EgovOe1ComDefaultCodeVO vo3 = new EgovOe1ComDefaultCodeVO();
+        vo1.setCodeId("OE1020");
+        List registJobSeCode = egovCmmUseService.selectCmmCodeDetail(vo1);
+        model.addAttribute("operJobSeCode", registJobSeCode);	
+        
+        //요청코드
+        EgovOe1ComDefaultCodeVO codeVo1 = new EgovOe1ComDefaultCodeVO();
+        codeVo1.setCodeId("OE1012");
+        List updateRequstTyCode = egovCmmUseService.selectCmmCodeDetail(codeVo1);
+        model.addAttribute("requstTyCode", updateRequstTyCode);
+		
+        //긴급처리여부
+        EgovOe1ComDefaultCodeVO codeVo2 = new EgovOe1ComDefaultCodeVO();
+        codeVo2.setCodeId("OE1005");
+        List updateEmrgncy = egovCmmUseService.selectCmmCodeDetail(codeVo2);
+        model.addAttribute("emrgncyProcessAt", updateEmrgncy);			
+        
+        //담당자
+        EgovOe1AuthorGroupVO authorGroupVo = new EgovOe1AuthorGroupVO();
+        authorGroupVo.setAuthorCode("ROLE_OPER_CHARGER"); //운영개선담당자
+        authorGroupVo.setFirstIndex(0);
+        authorGroupVo.setRecordCountPerPage(100);
+        List authorUser = egovAuthorGroupService.selectAuthorUserList(authorGroupVo);
+        model.addAttribute("authorUser", authorUser);
+		
 		
 		int totCnt = operImprovReqService.selectOperImprovReqListTotCnt(vo);
 		paginationInfo.setTotalRecordCount(totCnt);
