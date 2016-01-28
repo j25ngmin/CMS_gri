@@ -11,21 +11,38 @@ $(document).ready(function() {
 		fn_modify();
 	});
 	
-	$("#closeBtn").click(function(event){
+/*	$("#closeBtn").click(function(event){
 		alert("closeBtn 클릭 시 실행되는 제이쿼리 함수.");
 		fn_close(true);
-	});
+	});*/
 	
 	$("#regBtn").click(function(event){
 		alert("regBtn 클릭 시 실행되는 제이쿼리 함수.");
 		fn_modify(true);
 		$(".no_regist").attr('style', 'display: none');
+		
 		$("#detailFrstRegisterNm").html($("#s_mberNm").val());
-		$("#detailFrstRegisterPnttm").html($("#detailProcessComptDe").val());
+		$("#detailFrstRegisterPnttm").html($("#today").val());
+		$('input[name=frstRegisterNm]').attr('value',$("#s_mberNm").val());
+		$('input[name=frstRegisterId]').attr('value',$("#s_mberId").val());
+		console.log($("#s_mberNm").val());
+		console.log($("#today").val());
+
+		console.log("1"+$("#detailFrstRegisterNm").html());
+		console.log("2"+$("#detailFrstRegisterPnttm").html());
+		console.log("3"+$('input[name=frstRegisterNm]').val());
+		console.log("4"+$('input[name=frstRegisterId]').val());
+
+		
+
+		
 		//fn_save();
 		
 	});
-
+	
+	$('#detail_improv_request').on('hidden.bs.modal', function () {
+		 location.reload();
+		})
 		
 //	$('#modal-detail_improv_request').on('hidden.bs.modal', function (e) {
 //		console.log("11");
@@ -93,10 +110,10 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			
 			console.log(data.reqVO.requstTyCode);
 			//업무구분/요청코드/우선순위코드/유지보수 담당자
-			$('input[name=operJobSeCode]').attr('value',data.reqVO.operJobSeCode);
-			$('input[name=requstTyCode]').attr('value',data.reqVO.requstTyCode);
-			$('input[name=emrgncyProcessAt]').attr('value',data.reqVO.emrgncyProcessAt);
-			$('input[name=chargerId]').attr('value',data.reqVO.chargerId);
+		/*	$('input[name=input_operJobSeCode]').attr('value',data.reqVO.operJobSeCode);
+			$('input[name=input_requstTyCode]').attr('value',data.reqVO.requstTyCode);
+			$('input[name=input_emrgncyProcessAt]').attr('value',data.reqVO.emrgncyProcessAt);
+			$('input[name=input_chargerId]').attr('value',data.reqVO.chargerId);*/
 			
 			//조치이력 List
 			var processList= data.processList;
@@ -120,58 +137,114 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 //			var $selectemrgncyProcessAt = $('#detailEmrgncyProcessAt');
 //			var $selectchargerId = $('#detailChargerId');
 			
-			alert("ajax가 먼저 찾나?");
+alert("ajax가 먼저 찾나?");
 			
-			console.log("aaa  legnth  : "+$("aaa").length);
-			console.log("#aaa2  : "+$('#aaa').options[0].value);
 	
-			 var selectBox = document.getElementById("detailOperJobSecode"); // 셀렉트를 가져옵니다.
-			console.log("#1. AJAX로 find한 업무구분 : "+data.reqVO.operJobSeCode);
-			console.log("#1-1.  ddddd업무구분 legnth  : "+selectBox.length);
-			console.log("#111h  : "+$('#detailOperJobSecode').options[0].value);
+			 var detailOperJobSeCode = document.getElementById("detailOperJobSeCode"); // 셀렉트를 가져옵니다.
+			 var detailRequstTyCode = document.getElementById("detailRequstTyCode");
+			 var detailEmrgncyProcessAt = document.getElementById("detailEmrgncyProcessAt"); // 셀렉트를 가져옵니다.
+			 var detailChargerId = document.getElementById("detailChargerId"); // 셀렉트를 가져옵니다.
+			 
+			console.log("#1-1.  ddddd업무구분 legnth  : "+detailOperJobSeCode.length);
+			console.log("#2-1.  업무구분 legnth  : "+detailRequstTyCode.length);
+			console.log("#3-1.  긴급여부 legnth  : "+detailEmrgncyProcessAt.length); 
+			console.log("#4-1.  담당자 legnth  : "+detailChargerId.length);
 
+			console.log("#1.  업무구분   : "+data.reqVO.operJobSeCode);
+			console.log("#2.  업무구분   : "+data.reqVO.requstTyCode);
+			console.log("#3.  긴급여부   : "+data.reqVO.emrgncyProcessAt); 
+			console.log("#4.  담당자   : "+data.reqVO.chargerId);			
+			
+			console.log("#1. AJAX로 find한 업무구분 : "+data.reqVO.operJobSeCode);
+			
 			//업무구분
-					$.each($('#detailOperJobSecode').length, function(index, i){
+					for( var i =0; i<detailOperJobSeCode.length ; i++ ) {
+						console.log("#1-2. forEach로 돌려본 업무구분option : "+detailOperJobSeCode.options[i].value);
+						if(detailOperJobSeCode.options[i].value == data.reqVO.operJobSeCode) {
+							detailOperJobSeCode.options[i].selected = 'selected';
+							console.log("selected 됐다.")
+							break
+							}
+					}
+			
+			/* 왜 JQuery 는 안될까라는 의문때문에 지우지 않음...
+					$.each(detailOperJobSeCode.length, function(index, i){
 						console.log("#1-2. forEach로 돌려본 업무구분option : "+$('#detailOperJobSecode').option[i]);
 					if($('#detailOperJobSecode').options[i].value == data.reqVO.operJobSeCode) {
 						$('#detailOperJobSecode').options[i].selected = 'selected';
 						}
-					});
+					});*/
 			   	
 				console.log("#2. AJAX로 find한 요청코드 : "+data.reqVO.requstTyCode);
+				
+				for( var i =0; i<detailRequstTyCode.length ; i++ ) {
+					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 업무구분option : "+detailRequstTyCode.options[i].value);
+					if(detailRequstTyCode.options[i].value == data.reqVO.requstTyCode) {
+						detailRequstTyCode.options[i].selected = 'selected';
+						console.log("selected 됐다.")
+						break
+						}
+				}
+
 			   	//요청코드
-				$.each($('#detailRequstTyCode').length, function(index, i){
-					console.log("#2-1.  업무구분 legnth  : "+$('#detailRequstTyCode').length);
+			/*	$.each(detailRequstTyCode.length, function(index, i){
 					console.log("#2-2. forEach로 돌려본 업무구분option : "+$('#detailRequstTyCode').option[i]);
 					if($('#detailRequstTyCode').option[i] == data.reqVO.requstTyCode ) {
 						$('#detailRequstTyCode').option[i].selected = 'selected';
 						}
-					});
+					});*/
 				
 				console.log("#3. AJAX로 find한 긴급여부 : "+data.reqVO.emrgncyProcessAt);
+				
+/*				for( var i =0; i<detailEmrgncyProcessAt.length ; i++ ) {
+					console.log("#3-2. forEach로 돌려본 긴급여부 option : "/+detailEmrgncyProcessAt.options[i].value+"/");
+					if(detailEmrgncyProcessAt.options[i].value == data.reqVO.operJobSeCode) {
+						detailEmrgncyProcessAt.options[i].selected = 'selected';
+						console.log("selected 됐다.")
+						break
+						}
+				}*/
+				
+				for( var i =0; i<detailEmrgncyProcessAt.length ; i++ ) {
+					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 업무구분option : "+detailEmrgncyProcessAt.options[i].value);
+					if(detailEmrgncyProcessAt.options[i].value == data.reqVO.emrgncyProcessAt) {
+						detailEmrgncyProcessAt.options[i].selected = 'selected';
+						console.log("selected 됐다.")
+						break
+						}
+				}
+
 				//긴급여부
-				$.each($('#detailEmrgncyProcessAt').length, function(index, i){
-					console.log("#3-1.  긴급여부 legnth  : "+$('#detailEmrgncyProcessAt').length);
+			/*	$.each(detailEmrgncyProcessAt.length, function(index, i){
 					console.log("#3-2. forEach로 돌려본 긴급여부 option : "+$('#detailEmrgncyProcessAt').option[i]);
 					if($('#detailEmrgncyProcessAt').option[i] == data.reqVO.emrgncyProcessAt ) {
 						$('#detailEmrgncyProcessAt').option[i].selected = 'selected';
 						}
-					});
+					});*/
 					
 				console.log("#4. AJAX로 find한 담당자 : "+data.reqVO.chargerId);
+				
+				for( var i =0; i<detailChargerId.length ; i++ ) {
+					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 업무구분option : "+detailChargerId.options[i].value);
+					if(detailChargerId.options[i].value == data.reqVO.chargerId) {
+						detailChargerId.options[i].selected = 'selected';
+						console.log("selected 됐다.")
+						break
+						}
+				}
 
 				//담당자
-				$.each($('#detailChargerId').length, function(index, i){
-					console.log("#4-1.  담당자 legnth  : "+$('#detailChargerId').length);
+			/*	$.each(detailChargerId.length, function(index, i){
 					console.log("#4-2. forEach로 돌려본 담당자 option : "+$('#detailChargerId').option[i]);
 					if($('#detailChargerId').option[i] == data.reqVO.chargerId ) {
 						$('#detailChargerId').option[i].selected = 'selected';
 					}
-				});
+				});*/
 		},
 		error:function(request,status,error){
 	        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	       }
+
 
 	}); /* Ajax function */
 
@@ -183,12 +256,12 @@ function fn_update_oper_improv_req() {
 	
 	var url  = '/CMS/cms/ajax/updateOperImprovReqest.do'
 		
-	var operImprovReqVO = $("#listForm").serializeArray();
+	var operImprovReqVO = $("#listForm").serialize();
 	
 	console.log(operImprovReqVO);
 	console.log(url);
 
-	alert("fn_update_oper_improv_req SERIALIZEARRAY : "+operImprovReqVO);
+	alert("어레이 아님 fn_update_oper_improv_req SERIALIZE : "+operImprovReqVO);
 	
 	$.ajax ({
 		url : url ,
@@ -260,7 +333,7 @@ function fn_remove_oper_improv_req() {
 function fn_add_oper_process() {
 	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();
 	var processCn = $("#detailProcessCn").val();
-	var processComptDe = $("#detailProcessComptDe").val();
+	var processComptDe = $("input[name=processComptDe").val();
 	
 	console.log("processCn : "+processCn);
 	console.log("processComptDe : "+processComptDe);
@@ -293,13 +366,13 @@ function fn_add_oper_process() {
 /* 운영개선요청게시판에 게시글 등록하기. */
 function fn_add_oper_improv_req() {
 
-	var operImprovReqVO = $("#listForm").serializeArray();
+	var operImprovReqVO = $("#listForm").serialize();
 	
 	var url  = '/CMS/cms/ajax/addOperImprovReq.do'
 
 	console.log(url);
 
-	alert("fn_add_oper_improv_req SERIALIZE: "+operImprovReqVO);
+	alert("어레이 아님 !!! fn_add_oper_improv_req SERIALIZE: "+operImprovReqVO);
 	
 	$.ajax ({
 		url : url ,
@@ -308,53 +381,6 @@ function fn_add_oper_improv_req() {
 		data:operImprovReqVO,
 		success : function(data) {
 			alert("운영개선요청 게시글 들어갓다~~");
-		},
-		  error:function(request,status,error){
-		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-		       }
-		
-	}); /* Ajax function */
-} /* fn_add_oper_process */
-
-/* 운영개선요청게시판에 게시글 등록하기 위한 폼(DB) 받기*/
-function fn_add_oper_improv_req_view() {
-
-	var url  = '/CMS/cms/ajax/addOperImprovReqView.do'
-
-	console.log(url);
-
-	$.ajax ({
-		url : url ,
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
-		success : function(data) {
-			
-			console.log(data);
-			
-		/*	$('input[name=operJobSeCode]').attr('value',data.operJobSeCode.code);
-			var testOperJobSeCode= data.operJobSeCode;
-			var $selectoperJobSeCode= $('#detailOperJobSecode');
-			$selectoperJobSeCode.find('option').remove();
-			$selectoperJobSeCode.append('<option value>--선택하세요--</option>');
-			*/
-			/*//업무구분
-	   		console.log("testOperJobSeCode : "+testOperJobSeCode);
-			$.each(testOperJobSeCode, function(index, data){
-				var str;
-				console.log("업무구분 forEach  DB 값 :" +$('input[name=operJobSeCode]').val());
-				console.log("업무구분 forEach 비교할 값 :" +data.code);
-				str = "<option value=\'"+data.code+"\' ";
-				str += ">"+data.codeNm+"</option>";
-			
-			$selectoperJobSeCode.append(str);
-			 });
-			
-		  	//업무구분
-			$.each($('#detailOperJobSecode').length, function(index, i){
-			if($('#detailOperJobSecode').option[i] == data.reqVO.operJobSeCode) {
-				$('#detailOperJobSecode').option[i].selected = 'selected';
-				}
-			});
-			*/
 		},
 		  error:function(request,status,error){
 		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -386,13 +412,13 @@ function fn_buttonShow_by_authorCode_and_sessionId() {
 		}
 }
 
-function fn_close(reload) {
+/*function fn_close(reload) {
 	$('.modiInput').attr('readonly',true);
 	$('.modiInput').attr('style','border: 0px');
 	if(reload) {
 	location.reload();
 	}
-}
+}*/
 
 function fn_modify(add) {
 	$('#deleteBtn').attr('style','display: inline-block');
@@ -411,10 +437,18 @@ function fn_view() {
 	console.log("??????????????.");
 	$('.modiInput').attr('style','border: 0px');
 	$('.modiInput').attr('readonly',true);
-	console.log("경기연구원담당자.");
-	$('.modiSelect').attr('onFocus','this.initialSelect = this.selectedIndex;');
-	$('.modiSelect').attr('onChange', 'this.selectedIndex = this.initialSelect;');
-
+/*	$('.modiSelect').prop('onFocus','this.initialSelect = this.selectedIndex;');
+	$('.modiSelect').prop('onChange', 'this.selectedIndex = this.initialSelect;');*/
+	
+/*	$('.modiSelect').attr('title1', function(){
+		onFocus='this.initialSelect = this.selectedIndex;'
+	});
+	$('.modiSelect').attr('title2', function(){
+		onChange='this.selectedIndex = this.initialSelect';
+	});
+	title1();
+	title2();*/
+	
 	$('#deleteBtn').attr('style','display: lnline-block'); 
 	$('#modiBtn').attr('style','display: lnline-block'); 
 	$('#updateSaveBtn').attr('style','display: none');

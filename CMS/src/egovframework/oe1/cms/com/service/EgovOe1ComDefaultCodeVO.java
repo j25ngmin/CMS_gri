@@ -171,8 +171,20 @@ public class EgovOe1ComDefaultCodeVO implements Serializable {
         this.detailCondition = detailCondition;
     }
 
-    /** 객체정보 출력 */
+	@Override
+	public String toString() {
+		return "EgovOe1ComDefaultCodeVO [codeId=" + codeId + ", code=" + code
+				+ ", codeNm=" + codeNm + ", codeDc=" + codeDc + ", tableNm="
+				+ tableNm + ", haveDetailCondition=" + haveDetailCondition
+				+ ", detailCondition=" + detailCondition + "]";
+	}
+
+    /** 객체정보 출력 *//*
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
-    }
+    }*/
+    
+    
+    
+    
 }

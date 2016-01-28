@@ -72,34 +72,7 @@ public class AjaxController {
 		EgovOe1OperImprovReqVO reqVO = operImprovReqDAO.selectOperImprovReq(operImprovReqVO);
 		map.put("reqVO", reqVO);
 		
-		 //업무구분코드
-        EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
-        vo1.setCodeId("OE1020");
-        List srTrgetCode_result3 = cmmUseDAO.selectCmmCodeDetail(vo1);
-        map.put("operJobSeCode", srTrgetCode_result3);
-		
-	      //요청구분코드
-        //조회. 즉, 처리정보를 변경할 수 있다. 셀렉트 태그를 사용하기 위해 리스트를 가져오는 것 같음.
-        EgovOe1ComDefaultCodeVO codeVo1 = new EgovOe1ComDefaultCodeVO();
-        codeVo1.setCodeId("OE1012");
-        List srTrgetCode_result1 = cmmUseDAO.selectCmmCodeDetail(codeVo1);
-        map.put("requstTyCode", srTrgetCode_result1);
-
-        //긴급처리여부
-        //조회. 즉, 처리정보를 변경할 수 있다. 셀렉트 태그를 사용하기 위해 리스트를 가져오는 것 같음.
-        EgovOe1ComDefaultCodeVO codeVo2 = new EgovOe1ComDefaultCodeVO();
-        codeVo2.setCodeId("OE1005");
-        List srTrgetCode_result2 = cmmUseDAO.selectCmmCodeDetail(codeVo2);
-        map.put("emrgncyProcessAt", srTrgetCode_result2);
-        
-        //담당자
-        EgovOe1AuthorGroupVO authorGroupVo = new EgovOe1AuthorGroupVO();
-        authorGroupVo.setAuthorCode("ROLE_OPER_CHARGER"); //운영개선담당자
-        authorGroupVo.setFirstIndex(0);
-        authorGroupVo.setRecordCountPerPage(100);
-        List authorUser = egovOe1AuthorGroupDAO.selectAuthorUserList(authorGroupVo);
-        map.put("authorUser", authorUser);
-        
+	
       //조치이력
         EgovOe1OperProcessVO processVO = new EgovOe1OperProcessVO();
         List processList = operImprovReqDAO.selectOperProcessList(operImprovReqVO.getOperImprvmRequstId());
@@ -312,7 +285,7 @@ public class AjaxController {
 	 
 	 /* 운영개선요청게시판에 게시글 등록하기. */
 	 @RequestMapping(value="/cms/ajax/addOperImprovReq.do", method=RequestMethod.POST)
-	 public  void addOperImprovReq(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status, HttpServletResponse response)throws Exception  {
+	 public  @ResponseBody void addOperImprovReq(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status, HttpServletResponse response)throws Exception  {
 		
 		 System.out.println("#. AjaxController - addOperImprovReq.do  - START!!!");
 		
@@ -338,16 +311,10 @@ public class AjaxController {
     	
     	operImprovReqVO.setOperImprvmRequstId(id);
     	
-    	System.out.println("여기서 오류가 나나"+operImprovReqVO);
-    	
     	operImprovReqDAO.insertOperImprovReq(operImprovReqVO);    	
 		
 //		status.setComplete();
 		
-		ObjectMapper mapper = new ObjectMapper();
-		
-		boolean aaa = true;
-		 response.getWriter().print(mapper.writeValueAsString(aaa));		
 	 }
 	 
 /*	 @RequestMapping(value = "/cms/srm/gnrl/addOperImprovReqView.do")

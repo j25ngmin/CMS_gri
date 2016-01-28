@@ -67,5 +67,11 @@ public class EgovOe1AuthorGroupVO extends AuthorGroup {
     public void setAuthorGroupList(List<EgovOe1AuthorGroupVO> authorGroupList) {
         this.authorGroupList = authorGroupList;
     }
+	@Override
+	public String toString() {
+		return "EgovOe1AuthorGroupVO [authorGroupList=" + authorGroupList + "]";
+	}
+    
+    
 
 }

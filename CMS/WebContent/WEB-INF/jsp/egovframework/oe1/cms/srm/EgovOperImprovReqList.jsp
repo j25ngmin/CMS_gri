@@ -313,19 +313,14 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
       <tbody>
         <tr>
           <th scope="row" class="col-md-3">요청자</th>
-          <td class="col-md-3" id="detailFrstRegisterNm"></td>
+          <td class="col-md-3" id="detailFrstRegisterNm" ></td>
 		  <th scope="row" class="col-md-3">요청일자</th>
           <td class="col-md-3" id="detailFrstRegisterPnttm"></td>
         </tr>
        <tr>
           <th scope="row">업무구분</th>
           <td>
-          <select name="aaa" id="aaa" >
-	          	<option value="01">a</option>
-	          	<option value="02">b</option>
-	          	<option vlaue="03">c</option>
-	          	</select>
-         	<select name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
+         	<select class="modiSelect" name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="codeinfo" items="${operJobSeCode}" varStatus="status">
 	            <option value='${codeinfo.code}'>${codeinfo.codeNm}</option>
@@ -346,7 +341,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">요청구분</th>
 	         <td>
-		     <select name="requstTyCode" id="deTailRequstTyCode" title="요청구분" tabindex="1">
+		     <select class="modiSelect" name="requstTyCode" id="detailRequstTyCode"  title="요청구분" tabindex="1">
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="codeinfo" items="${requstTyCode}" varStatus="status">
 	            <option value='${codeinfo.code}' <c:if test="${vo.requstTyCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
@@ -355,7 +350,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 		     </td>
 	           <th scope="row">긴급</th>
 	           <td>
-			      <select name="emrgncyProcessAt" id="DetailEmrgncyProcessAt" title="긴급처리여부" tabindex="2">
+			      <select class="modiSelect" name="emrgncyProcessAt" id="detailEmrgncyProcessAt" title="긴급처리여부" tabindex="2">
 		          	<option value='' >--선택하세요--</option>
 		           	<c:forEach var="codeinfo" items="${emrgncyProcessAt}" varStatus="status">
 		            <option value='${codeinfo.code}' <c:if test="${vo.emrgncyProcessAt == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
@@ -366,7 +361,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">담당자</th>
 	        <td>
-			<select name="chargerId" id="deTailChargerId" title="담당자" tabindex="3">
+			<select class="modiSelect"  name="chargerId" id="detailChargerId" title="담당자" tabindex="3">
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="authorUser" items="${authorUser}" varStatus="status">
 	            <option value='${authorUser.mberId}' <c:if test="${vo.chargerId == authorUser.mberId}">selected="selected"</c:if>>${authorUser.mberNm} [${authorUser.mberId}]</option>
@@ -396,8 +391,10 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
         <tr class="no_regist">
         	<th id="processRow"  scope="row">조치이력</th>
         	<td colspan="3" style="padding:0px;">
+        	<div style="width:100%; height:200px; overflow:auto">
         		<table class="table table-bordered" id="processList" style="margin-bottom:0px;">
         		</table>
+        	</div>
         	</td>
         </tr>
           <c:if test="${  ! empty sessionScope.s_authorCode && sessionScope.s_authorCode != NULL }" > 
@@ -435,11 +432,10 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 </div>
 	<!-- Layer Popup -->
 	
-	<input type="hidden" class="modiInput" name="deTailFrstRegisterid" id="deTailFrstRegisterid" value=""/>
+	<input type="hidden" class="modiInput" name="frstRegisterId"  id="frstRegisterId" value=""/>
 	<!-- ??? 모달에서와 리스트에서와의 값이 다르다..그냥 잘 쓰고 있음. -->
 	<input type="hidden" class="modiInput" name="operImprvmRequstId" value="${result.operImprvmRequstId}" />
-	<input type="hidden" class="modiInput" name="operJobSeCode"  id="operJobSeCode" value="" />
-	
+
 	<!-- JSP에서 알 수 있는 세션 값들을 버튼/수정 UI를 분리하기 위해  fn_buttonShow_by_authorCode_and_sessionId 에서 쓴다.-->
 	<input type="hidden" name="s_mberId" id="s_mberId" value="${sessionScope.s_mberId}"/>
 	<input type="hidden" name="s_authorCode" id="s_authorCode" value="${sessionScope.s_authorCode}" />
@@ -447,15 +443,10 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	<!-- 글 등록할때 자동으로 요청자가 입력되기 위해 -->
 	<input type="hidden" name="s_mberNm" id="s_mberNm" value="${sessionScope.s_mberNm}"/>
 	
-	<!-- select태그에서 selected해주기 위한 비교 대상 -->
-	<input type="hidden" name="requstTyCode" id="requstTyCode"  value="" />
-	<input type="hidden" name="emrgncyProcessAt" id="emrgncyProcessAt" value="" />
-	<input type="hidden" name="chargerId" id="chargerId"  value="" />
+	<input type="hidden" name="processComptDe" id="today"  value="${date }" />
 	
-		<input type="hidden" name="chargerId" id="chargerId"  value="" />
-	
-	
-	<input type="hidden" name="processComptDe" id="detailProcessComptDe"  value="${date }" />
+	<!--  글 등록할 때 요청자가 보이기만 하는데 실제로 값이 넘어가기 위해서 쓴다 -->
+	<input type="hidden" name="frstRegisterNm"  value="" />
 
 
 	<!-- List -->
@@ -465,8 +456,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	</div>	
   	<div class="subbtn_align">  		
   			<li class="btn02_le`ftbg"></li>
-<%-- 		    <li class="btn02_middlebg"><a href="<c:url value='/cms/srm/gnrl/addOperImprovReqView.do'/>" onclick="fn_egov_addView(); return false;" class="btn_link">등록</a></li>
- --%>			 <li class="btn02_middlebg"><a data-toggle="modal" data-target="#detail_improv_request"  id="regBtn" class="btn_link"  onclick="fn_add_oper_improv_req_view();">등록</a></li>		
+				 <li class="btn02_middlebg"><a data-toggle="modal" data-target="#detail_improv_request"  id="regBtn" class="btn_link"  >등록</a></li>		
 			<li class="btn02_rightbg"></li>
   		</ul>
   	</div> 

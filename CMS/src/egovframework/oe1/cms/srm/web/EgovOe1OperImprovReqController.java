@@ -184,7 +184,6 @@ public class EgovOe1OperImprovReqController {
         List authorUser = egovAuthorGroupService.selectAuthorUserList(authorGroupVo);
         model.addAttribute("authorUser", authorUser);
 		
-		
 		int totCnt = operImprovReqService.selectOperImprovReqListTotCnt(vo);
 		paginationInfo.setTotalRecordCount(totCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
