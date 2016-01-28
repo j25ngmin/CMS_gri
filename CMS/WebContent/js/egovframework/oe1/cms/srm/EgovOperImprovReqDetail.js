@@ -111,43 +111,63 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 
 			fn_buttonShow_by_authorCode_and_sessionId();
 			
-			var testOperJobSeCode= data.operJobSeCode;
-			var testRequstTyCode= data.requstTyCode;
-			var testEmrgncyProcessAt= data.emrgncyProcessAt;
-			var testAuthorUser= data.authorUser;
-			var $selectoperJobSeCode= $('#detailOperJobSecode')
-			var $selectrequstTyCode= $('#detailRequstTyCode');
-			var $selectemrgncyProcessAt = $('#detailEmrgncyProcessAt');
-			var $selectchargerId = $('#detailChargerId');
+//			var testOperJobSeCode= data.operJobSeCode;
+//			var testRequstTyCode= data.requstTyCode;
+//			var testEmrgncyProcessAt= data.emrgncyProcessAt;
+//			var testAuthorUser= data.authorUser;
+//			var $selectoperJobSeCode= $('#detailOperJobSecode')
+//			var $selectrequstTyCode= $('#detailRequstTyCode');
+//			var $selectemrgncyProcessAt = $('#detailEmrgncyProcessAt');
+//			var $selectchargerId = $('#detailChargerId');
 			
+			alert("ajax가 먼저 찾나?");
+			
+			console.log("aaa  legnth  : "+$("aaa").length);
+			console.log("#aaa2  : "+$('#aaa').options[0].value);
+	
+			 var selectBox = document.getElementById("detailOperJobSecode"); // 셀렉트를 가져옵니다.
+			console.log("#1. AJAX로 find한 업무구분 : "+data.reqVO.operJobSeCode);
+			console.log("#1-1.  ddddd업무구분 legnth  : "+selectBox.length);
+			console.log("#111h  : "+$('#detailOperJobSecode').options[0].value);
 
-			  	//업무구분
+			//업무구분
 					$.each($('#detailOperJobSecode').length, function(index, i){
-					if($('#detailOperJobSecode').option[i] == data.operJobSeCode.code ) {
-						$('#detailOperJobSecode').option[i].selected = 'selected';
+						console.log("#1-2. forEach로 돌려본 업무구분option : "+$('#detailOperJobSecode').option[i]);
+					if($('#detailOperJobSecode').options[i].value == data.reqVO.operJobSeCode) {
+						$('#detailOperJobSecode').options[i].selected = 'selected';
 						}
 					});
 			   	
+				console.log("#2. AJAX로 find한 요청코드 : "+data.reqVO.requstTyCode);
 			   	//요청코드
 				$.each($('#detailRequstTyCode').length, function(index, i){
-					if($('#detailRequstTyCode').option[i] == data.requstTyCode.code ) {
+					console.log("#2-1.  업무구분 legnth  : "+$('#detailRequstTyCode').length);
+					console.log("#2-2. forEach로 돌려본 업무구분option : "+$('#detailRequstTyCode').option[i]);
+					if($('#detailRequstTyCode').option[i] == data.reqVO.requstTyCode ) {
 						$('#detailRequstTyCode').option[i].selected = 'selected';
 						}
 					});
 				
+				console.log("#3. AJAX로 find한 긴급여부 : "+data.reqVO.emrgncyProcessAt);
 				//긴급여부
 				$.each($('#detailEmrgncyProcessAt').length, function(index, i){
-					if($('#detailEmrgncyProcessAt').option[i] == data.emrgncyProcessAt.code ) {
+					console.log("#3-1.  긴급여부 legnth  : "+$('#detailEmrgncyProcessAt').length);
+					console.log("#3-2. forEach로 돌려본 긴급여부 option : "+$('#detailEmrgncyProcessAt').option[i]);
+					if($('#detailEmrgncyProcessAt').option[i] == data.reqVO.emrgncyProcessAt ) {
 						$('#detailEmrgncyProcessAt').option[i].selected = 'selected';
 						}
 					});
 					
-					//담당자
-					$.each($('#detailChargerId').length, function(index, i){
-						if($('#detailChargerId').option[i] == data.emrgncyProcessAt.code ) {
-							$('#detailChargerId').option[i].selected = 'selected';
-						}
-					});
+				console.log("#4. AJAX로 find한 담당자 : "+data.reqVO.chargerId);
+
+				//담당자
+				$.each($('#detailChargerId').length, function(index, i){
+					console.log("#4-1.  담당자 legnth  : "+$('#detailChargerId').length);
+					console.log("#4-2. forEach로 돌려본 담당자 option : "+$('#detailChargerId').option[i]);
+					if($('#detailChargerId').option[i] == data.reqVO.chargerId ) {
+						$('#detailChargerId').option[i].selected = 'selected';
+					}
+				});
 		},
 		error:function(request,status,error){
 	        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -310,13 +330,13 @@ function fn_add_oper_improv_req_view() {
 			
 			console.log(data);
 			
-			$('input[name=operJobSeCode]').attr('value',data.operJobSeCode.code);
+		/*	$('input[name=operJobSeCode]').attr('value',data.operJobSeCode.code);
 			var testOperJobSeCode= data.operJobSeCode;
 			var $selectoperJobSeCode= $('#detailOperJobSecode');
 			$selectoperJobSeCode.find('option').remove();
 			$selectoperJobSeCode.append('<option value>--선택하세요--</option>');
-			
-			//업무구분
+			*/
+			/*//업무구분
 	   		console.log("testOperJobSeCode : "+testOperJobSeCode);
 			$.each(testOperJobSeCode, function(index, data){
 				var str;
@@ -328,6 +348,13 @@ function fn_add_oper_improv_req_view() {
 			$selectoperJobSeCode.append(str);
 			 });
 			
+		  	//업무구분
+			$.each($('#detailOperJobSecode').length, function(index, i){
+			if($('#detailOperJobSecode').option[i] == data.reqVO.operJobSeCode) {
+				$('#detailOperJobSecode').option[i].selected = 'selected';
+				}
+			});
+			*/
 		},
 		  error:function(request,status,error){
 		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

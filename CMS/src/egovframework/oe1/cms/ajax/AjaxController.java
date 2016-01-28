@@ -366,7 +366,7 @@ public class AjaxController {
 			return "cms/srm/EgovOperImprovReqRegist";
 		}*/
 	 
-	 /* 운영개선요청게시판에 게시글 등록하기 위한 폼(DB) 받기*/
+/*	  운영개선요청게시판에 게시글 등록하기 위한 폼(DB) 받기
 	 @RequestMapping("/cms/ajax/addOperImprovReqView.do")
 	 public  @ResponseBody Map<String, Object> addOperImprovReqView() throws Exception  {
 		
@@ -375,7 +375,7 @@ public class AjaxController {
 		Map<String, Object> map = new HashMap<String, Object>();
 
 		//검색조건
-       /* model.addAttribute("searchVO", vo);*/
+        model.addAttribute("searchVO", vo);
         
 	 //업무구분코드
         EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
@@ -386,5 +386,5 @@ public class AjaxController {
         System.out.println("#. AjaxController - addOperImprovReqView.do  - END!!!");
         
         return map;
-	 }
+	 }*/
 }

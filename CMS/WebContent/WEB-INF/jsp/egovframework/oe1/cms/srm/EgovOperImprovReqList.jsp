@@ -320,8 +320,12 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
        <tr>
           <th scope="row">업무구분</th>
           <td>
+          <select name="aaa" id="aaa" >
+	          	<option value="01">a</option>
+	          	<option value="02">b</option>
+	          	<option vlaue="03">c</option>
+	          	</select>
          	<select name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
-         		<c:set var="${compareOperJobSeCode}"  value=""/>
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="codeinfo" items="${operJobSeCode}" varStatus="status">
 	            <option value='${codeinfo.code}'>${codeinfo.codeNm}</option>
