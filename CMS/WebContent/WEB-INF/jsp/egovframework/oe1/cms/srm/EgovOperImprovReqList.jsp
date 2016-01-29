@@ -35,6 +35,7 @@
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
    
 <!-- script -->
+<script type="text/javascript" src="<c:url value='/js/calendear.js'/>"></script>
 <script type="text/javascript" language="javascript" src="<c:url value='/js/egovframework/oe1/cms/com/EgovMainMenu.js' />" ></script>
 <script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery-1.4.2.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.core.js'/>"></script>
@@ -203,7 +204,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 			<colgroup>
 				<col width="30">				
 				<col width="200">			
-				<col width="55">
+				<col width="100">
 				<col width="60">
 				<col width="60">			
 				<col width="75">
@@ -248,7 +249,26 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 						</c:otherwise>	
 					</c:choose>
 				</td>
-				<td align="center"><c:out value="${result.requstSttusCodeNm}"/>&nbsp;</td>
+				<%-- 
+				<select class="modiSelect" name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
+	          	<option value='' >--선택하세요--</option>
+	           	<c:forEach var="codeinfo" items="${operJobSeCode}" varStatus="status">
+	            <option value='${codeinfo.code}'>${codeinfo.codeNm}</option>
+			  	</c:forEach>  
+	          	</select> --%>
+				<!-- 처리상태 -->
+				<td align="center">
+				<select class="modiSelect" name="requstSttusCode" id="detailRequstSttusCode" title="처리상태" tabindex="2" onChange="fn_update_requstSttusCode('<c:out value="${result.operImprvmRequstId}"/>', this.value)">
+		        			<!-- <select class="modiSelect" name="requstSttusCode" id="detailRequstSttusCode" title="처리상태" tabindex="2" onChange="alert(this.value)"> -->
+ 
+ 									<c:forEach var="codeinfo" items="${requstSttusCode}" varStatus="status">
+		         	  	<%-- <c:if test="${ empty result.requstSttusCode || result.requstSttusCode =''}" > --%>
+		            <option value="${codeinfo.code}"  <c:if test="${result.requstSttusCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
+<%-- 		            	</c:if>
+ --%>			  			</c:forEach>  
+	          	</select>
+				</td>
+				<!--/처리상태 -->
 				<td align="center"><c:out value="${result.operJobSeCodeNm}"/>&nbsp;</td>
 				<td align="center"><c:out value="${result.frstRegisterNm}"/>&nbsp;</td>
 				<td align="center"><c:out value="${result.frstRegisterPnttm}"/>&nbsp;</td>
@@ -328,7 +348,8 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	          	</select>
           </td>
 		  <th scope="row">완료요청일</th>
-          <td><input type="text"  class="modiInput" id="detailComptRequstDe" name="comptRequstDe" value="" ></td>
+          <td><input type="text"  class="modiInput" id="detailComptRequstDe" name="comptRequstDe" value="" >
+          </td>
         </tr>
         <tr>
           <th scope="row">요청내용</th>
@@ -379,13 +400,13 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 			    -->
 			</td>
 	           <th scope="row">접수일</th>
-	         <td><form:hidden path="rceptDt"/><c:out value="${vo.rceptDt}"/>
-	         </td>
+	       <%--   <td><form:hidden path="rceptDt"/><c:out value="${vo.rceptDt}"/></td> --%>
+	       <td id="detailRceptDt">
+	       </td>
         </tr>
         <tr class="no_regist">
-	          <th scope="row">처리완료일</th>
-	        <td colspan="3">
-				<!-- <input type="text"  class="modiInput" id="detailProcessComptDe" name="processComptDe" value="" readonly> -->
+	          <th scope="row" >처리완료일</th>
+	        <td colspan="3" id="detailProcessComptDe">
 			</td>
         </tr>
         <tr class="no_regist">
@@ -442,11 +463,17 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	
 	<!-- 글 등록할때 자동으로 요청자가 입력되기 위해 -->
 	<input type="hidden" name="s_mberNm" id="s_mberNm" value="${sessionScope.s_mberNm}"/>
-	
-	<input type="hidden" name="processComptDe" id="today"  value="${date }" />
-	
+		
 	<!--  글 등록할 때 요청자가 보이기만 하는데 실제로 값이 넘어가기 위해서 쓴다 -->
 	<input type="hidden" name="frstRegisterNm"  value="" />
+	
+	<!-- 태그가 td라서 값이 박히기만 하는데 그 박힌 값을 컨트롤러에 보내기 위해 인풋 히든을 쓴다. -->
+	<input type="hidden" class="modiInput"  name="rceptDt" id="rceptDt" value="" />
+	<input type="hidden" class="modiInput"  name="processComptDe" value="" />
+	
+	<!-- 자바스크립트에서 오늘 날짜를 사용하기위해. -->
+	<input type="hidden"  id="today" value="${now}" />
+	
 
 
 	<!-- List -->

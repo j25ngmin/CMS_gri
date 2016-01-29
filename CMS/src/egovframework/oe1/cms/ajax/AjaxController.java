@@ -14,6 +14,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -223,23 +224,13 @@ public class AjaxController {
 		
 		//지금 등록한 조치결과를 요청DB에 저장한다.
 		operImprovReqDAO.addOperImprovReqProcess(operImprovReqVO);
-		System.out.println("1");
 	
 		//저장된 요청DB에 있는 조치결과 값을 ProcessVO에 setting한다. 
 		operProcessVO.setOperProcessCn(operImprovReqVO.getProcessCn());
-		System.out.println("2");
 
 		operProcessVO.setOperImprvmRequstId(operImprovReqVO.getOperImprvmRequstId());
-		System.out.println("3");
-
-		operProcessVO.setOperProcessDate(operImprovReqVO.getProcessComptDe());
-		System.out.println("4");
-
-
+		
 		operImprovReqDAO.addOperProcess(operProcessVO);
-		System.out.println("5");
-
-
 
 		System.out.println("AjaxController - addOperProcess  - END!!!");
 		
@@ -317,41 +308,19 @@ public class AjaxController {
 		
 	 }
 	 
-/*	 @RequestMapping(value = "/cms/srm/gnrl/addOperImprovReqView.do")
-		public String insertOperImprovReqView(
-				@ModelAttribute("vo") EgovOe1OperImprovReqVO vo, ModelMap model) throws Exception {
-			//model.addAttribute("operImprovReqVO", new EgovOe1OperImprovReqVO());
-			//검색조건
-	        model.addAttribute("searchVO", vo);
-	        
-	    	//업무구분
-	        EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
-	        vo1.setCodeId("OE1020");
-	        List srTrgetCode_result1 = egovCmmUseService.selectCmmCodeDetail(vo1);
-	        model.addAttribute("operJobSeCode", srTrgetCode_result1);	
-			
-			return "cms/srm/EgovOperImprovReqRegist";
-		}*/
-	 
-/*	  운영개선요청게시판에 게시글 등록하기 위한 폼(DB) 받기
-	 @RequestMapping("/cms/ajax/addOperImprovReqView.do")
-	 public  @ResponseBody Map<String, Object> addOperImprovReqView() throws Exception  {
+	 /*  운영개선요청을 리스트에서 '처리상태' 콤보박스 값을 변경하기. */
+	 @RequestMapping(value="/cms/ajax/updateRequstSttusCode.do", method=RequestMethod.POST)
+	 public  @ResponseBody void updateRequstSttusCode(@RequestParam("requstSttusCode") String requstSttusCode, @RequestParam("operImprvmRequstId") String operImprvmRequstId, EgovOe1OperImprovReqVO operImprovReqVO)throws Exception  {
 		
-		 System.out.println("#. AjaxController - addOperImprovReqView.do  - START!!!");
+		 System.out.println("#. AjaxController - updateRequstSttusCode.do  - START!!!");
 		 
-		Map<String, Object> map = new HashMap<String, Object>();
+		 operImprovReqVO.setOperImprvmRequstId(operImprvmRequstId);
+		 operImprovReqVO.setRequstSttusCode(requstSttusCode);
+		 
+		 operImprovReqDAO.updateRequstSttusCode(operImprovReqVO);
+		 
+		 System.out.println("#. AjaxController - updateRequstSttusCode.do  - END!!!");
 
-		//검색조건
-        model.addAttribute("searchVO", vo);
-        
-	 //업무구분코드
-        EgovOe1ComDefaultCodeVO vo1 = new EgovOe1ComDefaultCodeVO();
-        vo1.setCodeId("OE1020");
-        List srTrgetCode_result3 = cmmUseDAO.selectCmmCodeDetail(vo1);
-        map.put("operJobSeCode", srTrgetCode_result3);
-        
-        System.out.println("#. AjaxController - addOperImprovReqView.do  - END!!!");
-        
-        return map;
-	 }*/
+	 }
+	 
 }

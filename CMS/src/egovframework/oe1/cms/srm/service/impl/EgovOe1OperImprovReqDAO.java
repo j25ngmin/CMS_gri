@@ -110,6 +110,16 @@ public class EgovOe1OperImprovReqDAO extends EgovAbstractDAO {
     public List  selectOperProcessList(String operImprvmRequstId) throws Exception {
         return list("operImprovReqDAO.selectOperProcessList", operImprvmRequstId);
     }
+    
+    /**
+	 * 운영개선요청을 리스트에서 '처리상태' 콤보박스 값을 변경한다.
+	 * @paramEgovOe1OperImprovReqVO
+	 * @return void
+	 * @exception Exception
+	 */
+    public void updateRequstSttusCode(EgovOe1OperImprovReqVO vo) throws Exception {
+        delete("operImprovReqDAO.updateRequstSttusCode", vo);
+    }
 
     /**
 	 * 운영개선요청을 삭제한다.

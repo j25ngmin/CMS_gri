@@ -107,13 +107,21 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$('input[id=detailOperJobSecodeNm]').attr('value',data.reqVO.operJobSeCodeNm); 
 			$('input[id=detailComptRequstDe]').attr('value',data.reqVO.comptRequstDe); 
 			$('input[id=detailOperImprvmRequstCn]').attr('value',data.reqVO.operImprvmRequstCn);
-			
-			console.log(data.reqVO.requstTyCode);
-			//업무구분/요청코드/우선순위코드/유지보수 담당자
-		/*	$('input[name=input_operJobSeCode]').attr('value',data.reqVO.operJobSeCode);
-			$('input[name=input_requstTyCode]').attr('value',data.reqVO.requstTyCode);
-			$('input[name=input_emrgncyProcessAt]').attr('value',data.reqVO.emrgncyProcessAt);
-			$('input[name=input_chargerId]').attr('value',data.reqVO.chargerId);*/
+			$('input[id=detailRequstSttusCode]').attr('value',data.reqVO.requstSttusCode);
+
+			//처리상태가 '02'(접수)일 경우 자동으로 접수일자가 들어가게 하기.
+			//처리상태가 '02'(접수)일 경우 자동으로 접수일자가 들어가게 하기.
+			if(data.reqVO.requstSttusCode == '02') {
+				console.log("처리상태가 02이다.");
+				$("#detailRceptDt").html($("#today").val());
+				$("#rceptDt").attr('value',$("#today").val());
+			}else if(data.reqVO.requstSttusCode == '07') {
+				$("#detailProcessComptDe").html($("#today").val());
+				console.log("3");
+				$('input[name=processComptDe]').attr('value',$($("#today").val()));
+				console.log("4");
+
+			}
 			
 			//조치이력 List
 			var processList= data.processList;
@@ -162,8 +170,8 @@ alert("ajax가 먼저 찾나?");
 						console.log("#1-2. forEach로 돌려본 업무구분option : "+detailOperJobSeCode.options[i].value);
 						if(detailOperJobSeCode.options[i].value == data.reqVO.operJobSeCode) {
 							detailOperJobSeCode.options[i].selected = 'selected';
-							console.log("selected 됐다.")
-							break
+							console.log("selected 됐다.");
+							break;
 							}
 					}
 			
@@ -181,8 +189,8 @@ alert("ajax가 먼저 찾나?");
 					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 업무구분option : "+detailRequstTyCode.options[i].value);
 					if(detailRequstTyCode.options[i].value == data.reqVO.requstTyCode) {
 						detailRequstTyCode.options[i].selected = 'selected';
-						console.log("selected 됐다.")
-						break
+						console.log("selected 됐다.");
+						break;
 						}
 				}
 
@@ -209,8 +217,8 @@ alert("ajax가 먼저 찾나?");
 					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 업무구분option : "+detailEmrgncyProcessAt.options[i].value);
 					if(detailEmrgncyProcessAt.options[i].value == data.reqVO.emrgncyProcessAt) {
 						detailEmrgncyProcessAt.options[i].selected = 'selected';
-						console.log("selected 됐다.")
-						break
+						console.log("selected 됐다.");
+						break;
 						}
 				}
 
@@ -228,8 +236,8 @@ alert("ajax가 먼저 찾나?");
 					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 업무구분option : "+detailChargerId.options[i].value);
 					if(detailChargerId.options[i].value == data.reqVO.chargerId) {
 						detailChargerId.options[i].selected = 'selected';
-						console.log("selected 됐다.")
-						break
+						console.log("selected 됐다.");
+						break;
 						}
 				}
 
@@ -248,7 +256,7 @@ alert("ajax가 먼저 찾나?");
 
 	}); /* Ajax function */
 
-} /* fn_egov_inqire_notice  */
+}; /* fn_egov_inqire_notice  */
 
 
 /* 운영개선요청 수정한 내용을 저장하기. */
@@ -387,7 +395,34 @@ function fn_add_oper_improv_req() {
 		       }
 		
 	}); /* Ajax function */
-} /* fn_add_oper_process */
+} /* fn_add_oper_improv_req */
+
+/*  운영개선요청을 리스트에서 '처리상태' 콤보박스 값을 변경하기. */
+function fn_update_requstSttusCode(operImprvmRequstId, requstSttusCode) {
+	
+	alert(operImprvmRequstId+"."+requstSttusCode);
+	
+	var url  = '/CMS/cms/ajax/updateRequstSttusCode.do'
+
+	console.log(url);
+
+	$.ajax ({
+		url : url ,
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		type:'POST',
+		data:{
+			operImprvmRequstId:operImprvmRequstId, requstSttusCode:requstSttusCode
+		},
+		success : function(data) {
+			alert("리스트에서 처리상태 값 변경됨. (성공)");
+			location.reload();
+		},
+		  error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       }
+	}); /* Ajax function */
+} /* fn_add_oper_improv_req */
+
 
 function fn_buttonShow_by_authorCode_and_sessionId() {
 	var frstRegisterId = $("#deTailFrstRegisterid").attr("value");

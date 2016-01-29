@@ -183,7 +183,13 @@ public class EgovOe1OperImprovReqController {
         authorGroupVo.setRecordCountPerPage(100);
         List authorUser = egovAuthorGroupService.selectAuthorUserList(authorGroupVo);
         model.addAttribute("authorUser", authorUser);
-		
+        
+      //처리상태
+	    EgovOe1ComDefaultCodeVO codeVo3 = new EgovOe1ComDefaultCodeVO();
+	    vo1.setCodeId("OE1003");
+        List requstSttusCode = egovCmmUseService.selectCmmCodeDetailForAll(vo1);
+        model.addAttribute("requstSttusCode", requstSttusCode);
+
 		int totCnt = operImprovReqService.selectOperImprovReqListTotCnt(vo);
 		paginationInfo.setTotalRecordCount(totCnt);
 		model.addAttribute("paginationInfo", paginationInfo);
