@@ -101,7 +101,7 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 
 			$("#detailFrstRegisterNm").html(data.reqVO.frstRegisterNm);
 			$("#detailFrstRegisterPnttm").html(data.reqVO.frstRegisterPnttm);
-			$('input[name=deTailFrstRegisterid]').attr('value',data.reqVO.frstRegisterId);
+			$('input[id=deTailFrstRegisterid]').attr('value',data.reqVO.frstRegisterId);
 			$('input[name=operImprvmRequstId]').attr('value',data.reqVO.operImprvmRequstId);
 			$('input[id=detailOperImprvmRequstSj]').attr('value',data.reqVO.operImprvmRequstSj); 
 			$('input[id=detailOperJobSecodeNm]').attr('value',data.reqVO.operJobSeCodeNm); 
@@ -120,7 +120,6 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 				console.log("3");
 				$('input[name=processComptDe]').attr('value',$($("#today").val()));
 				console.log("4");
-
 			}
 			
 			//조치이력 List
@@ -152,6 +151,8 @@ alert("ajax가 먼저 찾나?");
 			 var detailRequstTyCode = document.getElementById("detailRequstTyCode");
 			 var detailEmrgncyProcessAt = document.getElementById("detailEmrgncyProcessAt"); // 셀렉트를 가져옵니다.
 			 var detailChargerId = document.getElementById("detailChargerId"); // 셀렉트를 가져옵니다.
+			 var detailRequstSttusCode = document.getElementById("detailRequstSttusCode"); // 셀렉트를 가져옵니다.
+
 			 
 			console.log("#1-1.  ddddd업무구분 legnth  : "+detailOperJobSeCode.length);
 			console.log("#2-1.  업무구분 legnth  : "+detailRequstTyCode.length);
@@ -248,7 +249,17 @@ alert("ajax가 먼저 찾나?");
 						$('#detailChargerId').option[i].selected = 'selected';
 					}
 				});*/
+			
+				for( var i =0; i<detailRequstSttusCode.length ; i++ ) {
+					console.log("#1xxxxxxxxxx-2. forEach로 돌려본 처리상태option : "+detailRequstSttusCode.options[i].value);
+					if(detailRequstSttusCode.options[i].value == data.reqVO.requstSttusCode) {
+						detailRequstSttusCode.options[i].selected = 'selected';
+						console.log("selected 됐다.");
+						break;
+						}
+				}
 		},
+		
 		error:function(request,status,error){
 	        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	       }
@@ -264,7 +275,7 @@ function fn_update_oper_improv_req() {
 	
 	var url  = '/CMS/cms/ajax/updateOperImprovReqest.do'
 		
-	var operImprovReqVO = $("#listForm").serialize();
+	var operImprovReqVO = $(".update").serialize();
 	
 	console.log(operImprovReqVO);
 	console.log(url);

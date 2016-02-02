@@ -142,8 +142,10 @@ public class AjaxController {
 //		model.addAttribute("searchVO", vo);
 		
 		operImprovReqDAO.updateOperImprovReq(operImprovReqVO);
+		
+		EgovOe1OperImprovReqVO reqVO = operImprovReqDAO.selectOperImprovReq(operImprovReqVO);
 
-		System.out.println("updateOperImprovReqest :::받아온 파라메터 값 AFTER : "+operImprovReqVO);
+		System.out.println("updateOperImprovReqest :::다시 find한 값 AFTER : "+reqVO);
 
 		System.out.println("AjaxController - updateSelectOperImprovReqest  - END!!!");
 		

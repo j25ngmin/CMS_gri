@@ -278,12 +278,13 @@
 	</update>
 	
 <!-- 운영개선요청을 리스트에서 '처리상태' 콤보박스 값을 변경한다.  -->
-<update id="operImprovReqDAO.updateRequstSttusCode">
+<!-- <update id="operImprovReqDAO.updateRequstSttusCode">
 		UPDATE OE1TNOPERIMPROVREQ
 		SET
 			   REQUST_STTUS_CODE     = #requstSttusCode#
+			   ,PROCESS_COMPT_DE     = #processComptDe#
 		WHERE  OPER_IMPRVM_REQUST_ID = #operImprvmRequstId#		
-</update>
+</update> -->
 	
 <!-- 운영개선요청 삭제 -->
 	<delete id="operImprovReqDAO.deleteOperImprovReq">
