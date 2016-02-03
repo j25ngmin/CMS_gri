@@ -18,9 +18,8 @@
 	 -->
 	
 	<!-- log SQL with timing information, post execution -->
-
-
- <logger name="java.sql" additivity="false">
+ 
+<!--  <logger name="java.sql" additivity="false">
 		<level value="DEBUG" />
 		<appender-ref ref="console" />
 	</logger>
@@ -48,6 +47,6 @@
 	<root>
 		<level value="ERROR" />
 		<appender-ref ref="console" />
-	</root>
+	</root>  -->
 
 </log4j:configuration>

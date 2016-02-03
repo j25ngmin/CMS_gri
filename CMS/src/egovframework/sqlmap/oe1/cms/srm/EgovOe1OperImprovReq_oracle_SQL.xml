@@ -245,7 +245,7 @@
 					OPER_PROCESS_ID.nextval
 				  , #operImprvmRequstId#
 				  , #operProcessCn#
-				  , #operProcessDate#
+				  , SYSDATE
 				  )
 		]]>
 	</insert> 
@@ -265,6 +265,8 @@
 					,EMRGNCY_PROCESS_AT  =#emrgncyProcessAt# 
 					,CHARGER_ID      =   #chargerId# 
 					,REQUST_STTUS_CODE = #requstSttusCode#
+				   ,RCEPT_DT = #rceptDt#
+			   ,PROCESS_COMPT_DE =   replace(#processComptDe#,'-','')   
 			WHERE  OPER_IMPRVM_REQUST_ID   = #operImprvmRequstId#		
 	</update>
 	
@@ -272,19 +274,23 @@
 	<update id="operImprovReqDAO.addOperImprovReqProcess">
 			UPDATE OE1TNOPERIMPROVREQ
 			SET
-				   PROCESS_COMPT_DE     = SYSDATE
-				   ,PROCESS_CN           = #processCn#
+				REQUST_TY_CODE    =   #requstTyCode#  
+				,EMRGNCY_PROCESS_AT  =#emrgncyProcessAt# 
+				,CHARGER_ID      =   #chargerId# 
+				,REQUST_STTUS_CODE = #requstSttusCode#
+			   ,PROCESS_COMPT_DE =   replace(#processComptDe#,'-','')   
 			WHERE  OPER_IMPRVM_REQUST_ID = #operImprvmRequstId#		
 	</update>
 	
 <!-- 운영개선요청을 리스트에서 '처리상태' 콤보박스 값을 변경한다.  -->
-<!-- <update id="operImprovReqDAO.updateRequstSttusCode">
+ <update id="operImprovReqDAO.updateRequstSttusCode">
 		UPDATE OE1TNOPERIMPROVREQ
 		SET
 			   REQUST_STTUS_CODE     = #requstSttusCode#
-			   ,PROCESS_COMPT_DE     = #processComptDe#
+ 			   ,RCEPT_DT = #rceptDt#
+			   ,PROCESS_COMPT_DE = replace(#processComptDe#,'-','')  
 		WHERE  OPER_IMPRVM_REQUST_ID = #operImprvmRequstId#		
-</update> -->
+</update>
 	
 <!-- 운영개선요청 삭제 -->
 	<delete id="operImprovReqDAO.deleteOperImprovReq">

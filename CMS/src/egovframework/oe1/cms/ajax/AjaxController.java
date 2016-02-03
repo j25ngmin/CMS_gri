@@ -1,7 +1,10 @@
 package egovframework.oe1.cms.ajax;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -9,8 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,16 +19,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
-import egovframework.oe1.cms.com.service.EgovOe1ComDefaultCodeVO;
 import egovframework.oe1.cms.com.service.impl.EgovOe1CmmUseDAO;
 import egovframework.oe1.cms.srm.service.EgovOe1OperImprovReqVO;
 import egovframework.oe1.cms.srm.service.EgovOe1OperProcessVO;
 import egovframework.oe1.cms.srm.service.impl.EgovOe1OperImprovReqDAO;
-import egovframework.oe1.cms.sys.service.EgovOe1AuthorGroupVO;
 import egovframework.oe1.cms.sys.service.impl.EgovOe1AuthorGroupDAO;
 import egovframework.oe1.cms.sys.service.impl.EgovOe1BBSManageDAO;
 import egovframework.rte.fdl.idgnr.EgovIdGnrService;
-import egovframework.rte.psl.dataaccess.EgovAbstractDAO;
 
 
 @Controller
@@ -56,6 +54,10 @@ public class AjaxController {
 	@Resource(name="egovOperImprovReqIdGnrService")
 	private EgovIdGnrService operImprovReqIdGnrService;
 	
+	  
+	 SimpleDateFormat formatter = new SimpleDateFormat ( "yyyy-MM-dd", Locale.KOREA );
+	 Date currentTime = new Date ( );
+	 String dTime = formatter.format ( currentTime );
 	
 	/* 선택된 운영개선요청 글과 조치이력을 레이어팝업(모달)로 가져오기. */
 	 @RequestMapping(value="/cms/ajax/findOperImprovReqest.do", method=RequestMethod.GET)
@@ -128,7 +130,25 @@ public class AjaxController {
 		System.out.println("updateOperImprovReqest ::: 받아온 파라메터 값 BEFORE : "+operImprovReqVO);
 		System.out.println("updateOperImprovReqest ::: 자세히 찍어보자! : "+operImprovReqVO.getOperImprvmRequstSj()+"//"+operImprovReqVO.getRequstTyCode()+"//"+operImprovReqVO.getEmrgncyProcessAt()+"//"+operImprovReqVO.getChargerId());
 
-		 
+		 //처리상태(요청코드)값에 따라서 접수일/처리완료일이 변경된다.
+
+		 System.out.println("newwwwwwwww : "+operImprovReqVO.getRequstSttusCode());
+		 System.out.println("asdfasff : "+operImprovReqVO.getRceptDt());
+
+		 if(operImprovReqVO.getRequstSttusCode().equals("02")) {			// 접수
+			 operImprovReqVO.setRceptDt(dTime);
+			 System.out.println("##############접수..:"+dTime);
+			 //operImprovReqVO.setProcessComptDe();
+		 }else if(operImprovReqVO.getRequstSttusCode().equals("07")) {	// 완료
+			 System.out.println("##############완료.."+dTime);
+			/* EgovOe1OperImprovReqVO findreqVO = operImprovReqDAO.selectOperImprovReq(operImprovReqVO);
+			 System.out.println(findreqVO.getRceptDt());
+			 operImprovReqVO.setRceptDt(operImprovReqVO.);*/
+			 System.out.println("asdfasff : "+operImprovReqVO.getRceptDt());
+			 operImprovReqVO.setProcessComptDe(dTime);
+		 }
+		
+		
 //		우선 보류.
 //		Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
 //		
@@ -219,7 +239,6 @@ public class AjaxController {
 		}	*/
 
 		ObjectMapper mapper = new ObjectMapper();
-		System.out.println("###");
 		
 		//검색조건
 //		model.addAttribute("searchVO", vo);
@@ -318,6 +337,24 @@ public class AjaxController {
 		 
 		 operImprovReqVO.setOperImprvmRequstId(operImprvmRequstId);
 		 operImprovReqVO.setRequstSttusCode(requstSttusCode);
+		
+		 
+		 //처리상태(요청코드)값에 따라서 접수일/처리완료일이 변경된다.
+
+		 System.out.println(requstSttusCode);
+	
+		 if(requstSttusCode.equals("02")) {			// 접수
+			 System.out.println(dTime);
+			 operImprovReqVO.setRceptDt(dTime);
+			 System.out.println("접수..:"+dTime);
+			 //operImprovReqVO.setProcessComptDe();
+		 }else if(requstSttusCode.equals("07")) {	// 완료
+			 System.out.println("완료.."+dTime);
+			 EgovOe1OperImprovReqVO findreqVO = operImprovReqDAO.selectOperImprovReq(operImprovReqVO);
+			 System.out.println(findreqVO.getRceptDt());
+			 operImprovReqVO.setRceptDt(findreqVO.getRceptDt());
+			 operImprovReqVO.setProcessComptDe(dTime);
+		 }
 		 
 		 operImprovReqDAO.updateRequstSttusCode(operImprovReqVO);
 		 

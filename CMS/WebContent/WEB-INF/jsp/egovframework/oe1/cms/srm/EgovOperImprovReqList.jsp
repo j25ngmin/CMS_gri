@@ -1,11 +1,10 @@
 <%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<jsp:useBean id="now" class="java.util.Date" />
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="ui" uri="http://egovframework.gov/ctl/ui"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="date" /> 
+<fmt:formatDate value="<%=new java.util.Date()%>" pattern="yyyy-MM-dd"  var="now"/>
 
 <%
  /**
@@ -214,7 +213,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 			</colgroup>	
 			<thead>	  
 			<tr>
-				<th scope="col" align="center">순번</th>
+				<th scope="col" align="center">순번<c:out value="${now}" /></th>
 				<th scope="col" align="center">개선요청명</th>
 				<th scope="col" align="center">처리상태</th>
 				<th scope="col" align="center">업무구분</th>
@@ -258,7 +257,15 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	          	</select> --%>
 				<!-- 처리상태 -->
 				<td align="center">
-				<select class="modiSelect" name="requstSttusCode" id="ListRequstSttusCode" title="처리상태" tabindex="2" onChange="fn_update_requstSttusCode('<c:out value="${result.operImprvmRequstId}"/>', this.value)">
+				<select class="modiSelect" name="requstSttusCode" id="ListRequstSttusCode" title="처리상태" tabindex="2" 
+				  <c:choose>
+				  	<c:when test="${ (sessionScope.s_authorCode) == 'ROLE_ADMIN' || (sessionScope.s_authorCode) =='ROLE_OPER_CHARGER'}">
+					  	onChange="fn_update_requstSttusCode('<c:out value="${result.operImprvmRequstId}"/>', this.value)"
+				  	</c:when>
+				  	<c:otherwise>
+								  	disabled
+				  	</c:otherwise>
+				  </c:choose>>
  					<c:forEach var="codeinfo" items="${requstSttusCode}" varStatus="status">
 		         		   <option value="${codeinfo.code}"  <c:if test="${result.requstSttusCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
  			  			</c:forEach>  
@@ -358,7 +365,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">요청구분</th>
 	         <td>
-		     <select class="modiSelect update" name="requstTyCode" id="detailRequstTyCode"  title="요청구분" tabindex="1">
+		     <select class="modiSelect update process" name="requstTyCode" id="detailRequstTyCode"  title="요청구분" tabindex="1">
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="codeinfo" items="${requstTyCode}" varStatus="status">
 	            <option value='${codeinfo.code}' <c:if test="${vo.requstTyCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
@@ -367,7 +374,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 		     </td>
 	           <th scope="row">긴급</th>
 	           <td>
-			      <select class="modiSelect update" name="emrgncyProcessAt" id="detailEmrgncyProcessAt" title="긴급처리여부" tabindex="2">
+			      <select class="modiSelect update process" name="emrgncyProcessAt" id="detailEmrgncyProcessAt" title="긴급처리여부" tabindex="2">
 		          	<option value='' >--선택하세요--</option>
 		           	<c:forEach var="codeinfo" items="${emrgncyProcessAt}" varStatus="status">
 		            <option value='${codeinfo.code}' <c:if test="${vo.emrgncyProcessAt == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
@@ -378,7 +385,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
          <tr class="no_regist">
 	          <th scope="row">담당자</th>
 	        <td>
-			<select class="modiSelect update"  name="chargerId" id="detailChargerId" title="담당자" tabindex="3">
+			<select class="modiSelect update process"  name="chargerId" id="detailChargerId" title="담당자" tabindex="3">
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="authorUser" items="${authorUser}" varStatus="status">
 	            <option value='${authorUser.mberId}' <c:if test="${vo.chargerId == authorUser.mberId}">selected="selected"</c:if>>${authorUser.mberNm} [${authorUser.mberId}]</option>
@@ -419,12 +426,12 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
           <tr class="no_regist">
           <th scope="row">조치하기</th>
           <td colspan="3">
-          	<select class="modiSelect update" name="requstSttusCode" id="detailRequstSttusCode" title="처리상태" tabindex="2" />', this.value)">
+          	<select class="modiSelect update process" name="requstSttusCode" id="detailRequstSttusCode" title="처리상태" tabindex="2" />', this.value)">
  		  		<c:forEach var="codeinfo" items="${requstSttusCode}" varStatus="status">
 		        	<option value="${codeinfo.code}"  <c:if test="${result.requstSttusCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
 		      	</c:forEach>  
 	        </select>
-			<input type="text"  class="modiInput" id="detailProcessCn" name="processCn" value=""  readonly> 
+			<input type="text"  class="modiInput process" id="detailProcessCn" name="processCn" value=""  readonly> 
   	 		<button type="button" class="btn btn-primary" id="fn_procBtn();"onclick="fn_add_oper_process()">조치</button>
           </td>
         </tr>
@@ -458,7 +465,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	<input type="hidden" class="modiInput" name="frstRegisterId"  id="deTailFrstRegisterid" value=""/>
 	
 	<!-- ??? 모달에서와 리스트에서와의 값이 다르다..그냥 잘 쓰고 있음. -->
-	<input type="hidden" class="modiInput update" name="operImprvmRequstId" value="${result.operImprvmRequstId}" />
+	<input type="hidden" class="modiInput update process" name="operImprvmRequstId" value="${result.operImprvmRequstId}" />
 
 	<!-- JSP에서 알 수 있는 세션 값들을 버튼/수정 UI를 분리하기 위해  fn_buttonShow_by_authorCode_and_sessionId 에서 쓴다.-->
 	<input type="hidden" name="s_mberId" id="s_mberId" value="${sessionScope.s_mberId}"/>
@@ -471,8 +478,8 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 	<input type="hidden" name="frstRegisterNm"  value="" />
 	
 	<!-- 태그가 td라서 값이 박히기만 하는데 그 박힌 값을 컨트롤러에 보내기 위해 인풋 히든을 쓴다. -->
-	<input type="hidden" class="modiInput"  name="rceptDt" id="rceptDt" value="" />
-	<input type="hidden" class="modiInput"  name="processComptDe" value="" />
+	<input type="hidden" class="modiInput update"  name="rceptDt"" value="" />
+	<input type="hidden" class="modiInput update"  name="processComptDe" value="" />
 	
 	<!-- 자바스크립트에서 오늘 날짜를 사용하기위해. -->
 	<input type="hidden"  id="today" value="${now}" />

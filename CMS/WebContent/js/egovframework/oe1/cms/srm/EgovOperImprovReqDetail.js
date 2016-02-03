@@ -108,19 +108,29 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$('input[id=detailComptRequstDe]').attr('value',data.reqVO.comptRequstDe); 
 			$('input[id=detailOperImprvmRequstCn]').attr('value',data.reqVO.operImprvmRequstCn);
 			$('input[id=detailRequstSttusCode]').attr('value',data.reqVO.requstSttusCode);
+			
+			// 값이 박히기만 할 뿐만아니라 변경도 되야한다.
+			console.log(data.reqVO.rceptDt);
+			console.log(data.reqVO.processComptDe);
+			$("#detailRceptDt").html(data.reqVO.rceptDt);
+			$("#detailProcessComptDe").html(data.reqVO.processComptDe);
+			$('input[name=rceptDt]').attr('value',data.reqVO.rceptDt);
+			$('input[name=processComptDe]').attr('value',data.reqVO.processComptDe);
+
+
 
 			//처리상태가 '02'(접수)일 경우 자동으로 접수일자가 들어가게 하기.
 			//처리상태가 '02'(접수)일 경우 자동으로 접수일자가 들어가게 하기.
-			if(data.reqVO.requstSttusCode == '02') {
+		/*	if(data.reqVO.requstSttusCode == '02') {
 				console.log("처리상태가 02이다.");
 				$("#detailRceptDt").html($("#today").val());
-				$("#rceptDt").attr('value',$("#today").val());
+				$('input[name=rceptDt]').attr('value',$("#today").val());
 			}else if(data.reqVO.requstSttusCode == '07') {
 				$("#detailProcessComptDe").html($("#today").val());
 				console.log("3");
 				$('input[name=processComptDe]').attr('value',$($("#today").val()));
 				console.log("4");
-			}
+			}*/
 			
 			//조치이력 List
 			var processList= data.processList;
@@ -350,30 +360,26 @@ function fn_remove_oper_improv_req() {
 
 /* 운영개선요청글에 조치결과 답글 달기. */
 function fn_add_oper_process() {
-	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();
-	var processCn = $("#detailProcessCn").val();
-	var processComptDe = $("input[name=processComptDe").val();
 	
-	console.log("processCn : "+processCn);
-	console.log("processComptDe : "+processComptDe);
+	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();
+	
+	var operImprovReqVO = $(".process").serialize();
 
 	var url  = '/CMS/cms/ajax/addOperProcess.do'
-
+		
+	alert(operImprovReqVO);
 	console.log(url);
 	
 	$.ajax ({
 		url : url ,
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
 		type:'POST',
-		data:	{
-			operImprvmRequstId:operImprvmRequstId, processCn:processCn, processComptDe:processComptDe
-		},
+		data:	
+			operImprovReqVO,
 		success : function(responseData) {
 			alert("조치결과 들어갓다~~");
 			fn_find_oper_improv_req(operImprvmRequstId);
 			$("#detailProcessCn").attr("value", ' ');
-			
-
 		},
 		  error:function(request,status,error){
 		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -509,11 +515,12 @@ function fn_save() {
 	}
 }
 
+// 조회만 할수있는 상태에서 조치를 남길수있는가 없는가. --> 경기연구원담당자/유지보수담당자 
 function fn_initBtn(author) {
 	$('#deleteBtn').attr('style','display: none');
 	$('#modiBtn').attr('style','display: none'); 
 	$('#updateSaveBtn').attr('style','display: none'); 
 	if(author) {
-		$('#detailProcess').attr('readonly',false);
+		$('#detailProcessCn').attr('readonly',false);
 	}
 }
