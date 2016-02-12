@@ -119,7 +119,7 @@ public class AjaxController {
 	 
 	 /* 운영개선요청 수정한 내용을 저장하기. */
 	 @RequestMapping(value="/cms/ajax/updateOperImprovReqest.do", method=RequestMethod.POST)
-	 public  void updateOperImprovReqest(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status, HttpServletResponse response)throws Exception  {
+	 public  @ResponseBody void updateOperImprovReqest(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status)throws Exception  {
 		
 		 System.out.println("AjaxController - updateSelectOperImprovReqest - START!!!");
 	
@@ -132,19 +132,12 @@ public class AjaxController {
 //		if(!isAuthenticated){
 //		     return "forward:/cms/com/EgovOe1LoginUsr.do";  //임시로그온페이지 이동
 //		}	
-
-		ObjectMapper mapper = new ObjectMapper();
-		
 		//검색조건
 //		model.addAttribute("searchVO", vo);
 		
 		operImprovReqDAO.updateOperImprovReq(operImprovReqVO);
 		
 		System.out.println("AjaxController - updateSelectOperImprovReqest  - END!!!");
-		
-		boolean aaa = true;
-		
-		 response.getWriter().print(mapper.writeValueAsString(aaa));		 
 	}
 	 
 	/*   @RequestMapping(value="/cms/srm/gnrl/deleteOperImprovReq.do")
@@ -169,7 +162,7 @@ public class AjaxController {
 	 
 	 /* 운영개선요청글 삭제하기. */
 	 @RequestMapping(value="/cms/ajax/removeOperImprovReqest.do", method=RequestMethod.POST)
-	 public  void removeOperImprovReqest(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, SessionStatus status, HttpServletResponse response)throws Exception  {
+	 public @ResponseBody void removeOperImprovReqest(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, SessionStatus status)throws Exception  {
 		
 		 System.out.println("AjaxController - removeOperImprovReqest - START!!!");
 		 
@@ -178,8 +171,6 @@ public class AjaxController {
 		if(!isAuthenticated){
 		     return "forward:/cms/com/EgovOe1LoginUsr.do";  //임시로그온페이지 이동
 		}*/
-
-		ObjectMapper mapper = new ObjectMapper();
 		
 	 	//파일삭제
 /*    	if(!vo.getAtchFileId().equals("")){
@@ -190,15 +181,11 @@ public class AjaxController {
     	operImprovReqDAO.deleteOperImprovReq(operImprovReqVO);
     	
 		System.out.println("AjaxController - removeOperImprovReqest  - END!!!");
-		
-		boolean aaa = true;
-		
-		 response.getWriter().print(mapper.writeValueAsString(aaa));		 
 	}
 	    
 	 /* 운영개선요청글에 조치결과 답글 달기. */
 	 @RequestMapping(value="/cms/ajax/addOperProcess.do", method=RequestMethod.POST)
-	 public  void addOperProcess(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status, HttpServletResponse response)throws Exception  {
+	 public @ResponseBody void  addOperProcess(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status)throws Exception  {
 		
 		 System.out.println("AjaxController - addOperProcess - START!!!");
 		
@@ -210,8 +197,6 @@ public class AjaxController {
 		if(!isAuthenticated){
 		     return "forward:/cms/com/EgovOe1LoginUsr.do";  //임시로그온페이지 이동
 		}	*/
-
-		ObjectMapper mapper = new ObjectMapper();
 		
 		//검색조건
 //		model.addAttribute("searchVO", vo);
@@ -229,10 +214,6 @@ public class AjaxController {
 		}
 		
 		System.out.println("AjaxController - addOperProcess  - END!!!");
-		
-		boolean aaa = true;
-		
-		 response.getWriter().print(mapper.writeValueAsString(aaa));		 
 	}
 	 
 /*		
@@ -309,7 +290,18 @@ public class AjaxController {
 		operImprovReqDAO.updateRequstSttusCode(operImprovReqVO);
 		 
 		 System.out.println("#. AjaxController - updateRequstSttusCode.do  - END!!!");
-
+	 }
+	 
+	 /*  조치이력에서 원하는 조치이력을 삭제하기. */
+	 @RequestMapping(value="/cms/ajax/removeOperProcess.do", method=RequestMethod.POST)
+	 public  @ResponseBody void removeOperProcess(@RequestParam("operProcessId") String operProcessId)throws Exception  {
+		
+		 System.out.println("#. AjaxController - removeOperProcess.do  - START!!!");
+		 System.out.println("받아온 값 : "+operProcessId);
+		
+		operImprovReqDAO.deleteOperProcess(operProcessId);
+		
+		 System.out.println("#. AjaxController - removeOperProcess.do  - END!!!");
 	 }
 	 
 }

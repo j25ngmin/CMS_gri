@@ -130,6 +130,17 @@ public class EgovOe1OperImprovReqDAO extends EgovAbstractDAO {
     public void deleteOperImprovReq(EgovOe1OperImprovReqVO vo) throws Exception {
         delete("operImprovReqDAO.deleteOperImprovReq", vo);
     }
+    
+    /**
+	 * 조치이력에서 원하는 조치이력을 삭제하기. 
+	 * @paramEgovOe1OperImprovReqVO
+	 * @return void
+	 * @exception Exception
+	 */
+    public void deleteOperProcess(String operProcessId) throws Exception {
+        delete("operImprovReqDAO.deleteOperProcess", operProcessId);
+    }
+
 
     /**
 	 * 운영개선요청을 상세조회한다.

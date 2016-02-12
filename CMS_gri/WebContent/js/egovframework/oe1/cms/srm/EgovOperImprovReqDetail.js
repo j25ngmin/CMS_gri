@@ -33,6 +33,19 @@ $(document).ready(function() {
 	$('#detail_improv_request').on('hidden.bs.modal', function () {
 		 location.reload();
 		});
+	
+	/*$("#detailOperImprvmRequstSj").keyup(function() {
+		alert("1");
+		var detailOperImprvmRequstSj = 	$("#detailOperImprvmRequstSj").val();
+		alert("2");
+
+			if(detailOperImprvmRequstSj == null || detailOperImprvmRequstSj.length<1) {
+				alert("3");
+
+				$("#detailOperImprvmRequstSj_check").html('<font color=red>제목</font>을 입력해주세요.');
+				$("#detailOperImprvmRequstSj_check").show();
+			}
+	}); */
 });
 
 /* 선택된 운영개선요청 글과 조치이력을 레이어팝업(모달)로 가져오기. */
@@ -76,8 +89,13 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$processList.empty();
 			//조치이력 List 돌기
 			   $.each(processList, function(index, data){
-				   $processList.append("<tr><td>"+data.operProcessDate+"<br>"+
+				   $processList.append("<tr><td>"+data.operProcessDate+
+						   "<button id="+data.operProcessId+" class='delProcess' onclick='fn_remove_oper_process("+data.operProcessId+")'>"+
+						   "<span class='glyphicon glyphicon-remove'>"
+						   +"</button><br>"+
 						   data.operProcessCn+"</td></tr>");
+/*				   $processList.append("<tr><td>"+data.operProcessDate+"</td> </tr>"+
+						 "<tr><td>"+  data.operProcessCn+"</td></tr>");*/
 			   });	
 
 			 var detailOperJobSeCode = document.getElementById("detailOperJobSeCode"); // 셀렉트를 가져옵니다.
@@ -146,6 +164,10 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 /* 운영개선요청 수정한 내용을 저장하기. */
 function fn_update_oper_improv_req() {
 	
+	regist_check_init();
+	regist_check();
+	
+	 if($("#detailOperImprvmRequstSj").val() != "" && $("#detailComptRequstDe").val() != "" && $("#detailOperJobSeCode").val() != '' && $("#detailOperImprvmRequstCn").val() != '' ) {
 	
 	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();	
 	var operImprovReqVO = $(".update").serialize();
@@ -157,27 +179,23 @@ function fn_update_oper_improv_req() {
 
 	alert("어레이 아님 fn_update_oper_improv_req SERIALIZE : "+operImprovReqVO);
 	
-	$.ajax ({
-		url : url ,
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
-		type:'POST',
-		data:	operImprovReqVO,
-		success : function(responseData) {
-			alert(responseData);
+		$.ajax ({
+			url : url ,
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+			type:'POST',
+			data:	operImprovReqVO,
+			success : function(responseData) {
+				alert(responseData);
 		
-			if(responseData) {
-				alert("modiInputData 수정한 내용 저장 성공^^. "+responseData);
-				fn_find_oper_improv_req(operImprvmRequstId)
-
-			}else {
-				alert("modiInputData 수정한 내용 저장 실패 ㅠㅠ. " +responseData);
-			}
-		},
-		  error:function(request,status,error){
-		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-		       }
-		
-	}); /* Ajax function */
+					alert("modiInputData 수정한 내용 저장 성공^^. "+responseData);
+					fn_find_oper_improv_req(operImprvmRequstId)
+			},
+			  error:function(request,status,error){
+			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			       }
+			
+		}); /* Ajax function */
+	 }
 } /* fn_update_oper_improv_req  */
 
 /* 운영개선요청글 삭제하기. */
@@ -242,9 +260,10 @@ function fn_add_oper_process() {
 			operImprovReqVO,
 		success : function(responseData) {
 			alert("조치결과 들어갓다~~");
-			fn_find_oper_improv_req(operImprvmRequstId);
 			//조치버튼을 눌렀을 때, 조치사항 남기는 input창은(전 기록) 비어져있어야 한다.  
-			//$("#detailProcessCn").attr("value", ' ');
+			$("#detailProcessCn").val() =='';
+			fn_find_oper_improv_req(operImprvmRequstId);
+			
 		},
 		  error:function(request,status,error){
 		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
@@ -253,30 +272,38 @@ function fn_add_oper_process() {
 	}); /* Ajax function */
 } /* fn_add_oper_process */
 
-/* 운영개선요청게시판에 게시글 등록하기. */
+/* 운영개선요청게시판에 게시글 등록하기
+ * 등록 전 유효성 검사.
+ */
 function fn_add_oper_improv_req() {
-
-	var operImprovReqVO = $("#listForm").serialize();
 	
+	regist_check_init();
+	regist_check();
+	
+	 if($("#detailOperImprvmRequstSj").val() != "" && $("#detailComptRequstDe").val() != "" && $("#detailOperJobSeCode").val() != '' && $("#detailOperImprvmRequstCn").val() != '' ) {
+	 
+	var operImprovReqVO = $("#listForm").serialize();
 	var url  = '/CMS_gri/cms/ajax/addOperImprovReq.do'
 
 	console.log(url);
 
 	alert("어레이 아님 !!! fn_add_oper_improv_req SERIALIZE: "+operImprovReqVO);
 	
-	$.ajax ({
-		url : url ,
-		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
-		type:'POST',
-		data:operImprovReqVO,
-		success : function(data) {
-			alert("운영개선요청 게시글 들어갓다~~");
-		},
-		  error:function(request,status,error){
-		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-		       }
-		
-	}); /* Ajax function */
+		$.ajax ({
+			url : url ,
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+			type:'POST',
+			data:operImprovReqVO,
+			success : function(data) {
+				alert("운영개선요청 게시글 들어갓다~~");
+				location.reload();
+			},
+			  error:function(request,status,error){
+			        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			       }
+			
+		}); /* Ajax function */
+	 }
 } /* fn_add_oper_improv_req */
 
 /*  운영개선요청을 리스트에서 '처리상태' 콤보박스 값을 변경하기. */
@@ -308,8 +335,32 @@ function fn_update_requstSttusCode(operImprvmRequstId, requstSttusCode) {
 		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 		       }
 	}); /* Ajax function */
-} /* fn_add_oper_improv_req */
+} /* fn_update_requstSttusCode */
 
+/*  조치이력에서 원하는 조치이력을 삭제하기. */
+function fn_remove_oper_process(operProcessId) {
+
+	var operImprvmRequstId = 	$("input[name=operImprvmRequstId]").val();
+	var url  = '/CMS_gri/cms/ajax/removeOperProcess.do'
+
+	console.log(url);
+
+	$.ajax ({
+		url : url ,
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8", 
+		type:'POST',
+		data:{
+			operProcessId:operProcessId
+			},
+		success : function(data) {
+			alert("조치이력에서 원하는 조치이력을 삭제하기. (성공)");
+			fn_find_oper_improv_req(operImprvmRequstId);
+		},
+		  error:function(request,status,error){
+		        alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		       }
+	}); /* Ajax function */
+} /* fn_remove_oper_process */
 
 function fn_buttonShow_by_authorCode_and_sessionId() {
 	var frstRegisterId = $("#deTailFrstRegisterid").attr("value");
@@ -355,22 +406,11 @@ function fn_modify(add) {
 	}
 }
 
+//role_oper_admin 이 자기가 쓴 글을 선택했을 때,
 function fn_view() {
 	console.log("??????????????.");
 	$('.modiInput').attr('style','border: 0px');
 	$('.modiInput').attr('readonly',true);
-/*	$('.modiSelect').prop('onFocus','this.initialSelect = this.selectedIndex;');
-	$('.modiSelect').prop('onChange', 'this.selectedIndex = this.initialSelect;');*/
-	
-/*	$('.modiSelect').attr('title1', function(){
-		onFocus='this.initialSelect = this.selectedIndex;'
-	});
-	$('.modiSelect').attr('title2', function(){
-		onChange='this.selectedIndex = this.initialSelect';
-	});
-	title1();
-	title2();*/
-	
 	$('#deleteBtn').attr('style','display: lnline-block'); 
 	$('#modiBtn').attr('style','display: lnline-block'); 
 	$('#updateSaveBtn').attr('style','display: none');
@@ -390,7 +430,33 @@ function fn_initBtn(author) {
 	$('#deleteBtn').attr('style','display: none');
 	$('#modiBtn').attr('style','display: none'); 
 	$('#updateSaveBtn').attr('style','display: none'); 
+	
 	if(author) {
 		$('#detailProcessCn').attr('readonly',false);
 	}
 }
+
+//글 등록할때, 유효성검사하기 위한 태그 초기화.
+function regist_check_init() {
+	 $("#detailOperImprvmRequstSj_check").empty();
+	 $("#detailComptRequstDe_check").empty();
+	 $("#detailOperJobSeCode_check").empty();
+	 $("#detailOperImprvmRequstCn_check").empty();
+	}	
+
+//글 등록할때, 유효성 검사. --> 추후 소스를 바꿀 필요가 있다.
+function regist_check() {
+	if( $("#detailOperImprvmRequstSj").val() == "") {
+		 $("#detailOperImprvmRequstSj").attr('style', 'border-color:red'); // 왜 안되니????
+		 $("#detailOperImprvmRequstSj_check").html ('<font color=red>제목</font>을 입력해주세요.');
+		}
+		if( $("#detailComptRequstDe").val() == "" ) {
+		 $("#detailComptRequstDe_check").html ('<font color=red>완료요청일</font>을 선택해주세요.');
+		}
+		 if( $("#detailOperJobSeCode").val() == '' ) {
+		 $("#detailOperJobSeCode_check").html ('<font color=red>업무구분</font>을 선택해주세요.');
+		}
+		 if( $("#detailOperImprvmRequstCn").val() == '' ) {
+		 $("#detailOperImprvmRequstCn_check").html ('<font color=red>내용</font>을 입력해주세요.');
+		}
+	}

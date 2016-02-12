@@ -143,7 +143,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
     <!-- 메인 시작 -->
     <div id="container">
         <!-- 좌메뉴 시작 -->
-        <div id="leftmenu"><c:import url="/cms/com/EgovOe1LeftMenu.do" charEncoding="utf-8"/></div>
+        <%-- <div id="leftmenu"><c:import url="/cms/com/EgovOe1LeftMenu.do" charEncoding="utf-8"/></div> --%>
         <!-- 좌메뉴 끝 -->
 
 
@@ -236,17 +236,11 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 			<tr>
 				<td align="center"><c:out value="${paginationInfo.totalRecordCount - (vo.pageIndex - 1) * vo.pageSize - status.count + 1}"/></td>
 				<td align="left">
-					<c:choose>
-						<c:when test="${result.requstSttusCode == '01' || result.requstSttusCode == '02'}">
-<!-- 						<a href="<c:url value='/cms/srm/gnrl/selectOperImprovReq.do'/>?selectedId=<c:out value="${result.operImprvmRequstId}"/>" onclick="fn_egov_select('<c:out value="${result.operImprvmRequstId}"/>','<c:out value="${result.requstSttusCode}"/>'); return false;" class="board_text_link"><c:out value="${result.operImprvmRequstSj}"/></a> -->
-							<a data-toggle="modal" data-target="#detail_improv_request"  onclick="fn_find_oper_improv_req('<c:out value="${result.operImprvmRequstId}"/>')"><c:out value="${result.operImprvmRequstSj}"/></a>
-						</c:when>
-						<c:otherwise>
-<!-- 						<a href="<c:url value='/cms/srm/gnrl/selectOperImprovReqEnd.do'/>?selectedId=<c:out value="${result.operImprvmRequstId}"/>" onclick="fn_egov_select('<c:out value="${result.operImprvmRequstId}"/>','<c:out value="${result.requstSttusCode}"/>'); return false;" class="board_text_link"><c:out value="${result.operImprvmRequstSj}"/></a> -->
-							<a data-toggle="modal" data-target="#detail_improv_request"  onclick="fn_find_oper_improv_req('<c:out value="${result.operImprvmRequstId}"/>')"><c:out value="${result.operImprvmRequstSj}"/></a>
-							
-						</c:otherwise>	
-					</c:choose>
+	<!-- 		<a href="<c:url value='/cms/srm/gnrl/selectOperImprovReq.do'/>?selectedId=<c:out value="${result.operImprvmRequstId}"/>" onclick="fn_egov_select('<c:out value="${result.operImprvmRequstId}"/>','<c:out value="${result.requstSttusCode}"/>'); return false;" class="board_text_link"><c:out value="${result.operImprvmRequstSj}"/></a> -->
+					<a data-toggle="modal" data-target="#detail_improv_request"  onclick="fn_find_oper_improv_req('<c:out value="${result.operImprvmRequstId}"/>')"><c:out value="${result.operImprvmRequstSj}"/></a>
+					<c:if test="${result.frstRegisterPnttm == now}">
+						<span class="label label-danger">new</span>
+					</c:if>
 				</td>
 				<%-- 
 				<select class="modiSelect" name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
@@ -325,10 +319,13 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
   <div class="modal-dialog  modal-lg" role="document">
     <div class="modal-content" >
       <div class="modal-header">
+        <div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         <h4 class="modal-title" id="myModalLabel">
         <input  type="text"  class="modiInput update" id="detailOperImprvmRequstSj" name="operImprvmRequstSj" value="" readonly />
         </h4>
+        </div>
+        <div  id="detailOperImprvmRequstSj_check" ></div>
       </div>
        
       <div class="modal-body">
@@ -345,20 +342,27 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
        <tr>
           <th scope="row">업무구분</th>
           <td>
+          	<div>
          	<select class="modiSelect update" name="operJobSeCode" id="detailOperJobSeCode" title="업무구분" tabindex="2">
 	          	<option value='' >--선택하세요--</option>
 	           	<c:forEach var="codeinfo" items="${operJobSeCode}" varStatus="status">
 	            <option value='${codeinfo.code}'>${codeinfo.codeNm}</option>
 			  	</c:forEach>  
-	          	</select>
+	          	</select></div>
+	          	<div id="detailOperJobSeCode_check"></div>
+	          	
           </td>
 		  <th scope="row">완료요청일</th>
-          <td><input type="text"  class="modiInput update" id="detailComptRequstDe" name="comptRequstDe" value="" >
+          <td><div><input type="text"  class="modiInput update" id="detailComptRequstDe" name="comptRequstDe" value="" ></div>
+          			<div id="detailComptRequstDe_check"></div>
           </td>
         </tr>
         <tr>
           <th scope="row">요청내용</th>
-          <td colspan="3" height='100'><input type="text"  class="modiInput update" id="detailOperImprvmRequstCn" name="operImprvmRequstCn" style="width:100%;height:100%;"   readonly></td>
+          <td colspan="3" height='100'>
+      		 <div><input type="text"  class="modiInput update" id="detailOperImprvmRequstCn" name="operImprvmRequstCn" style="width:100%;height:100%;"   readonly></div>
+        	<div id="detailOperImprvmRequstCn_check"></div>
+        </td>
         </tr>
          <tr>
           <th scope="row">첨부파일목록</th>
@@ -434,7 +438,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 		      	</c:forEach>  
 	        </select>
 			<input type="text"  class="modiInput process" id="detailProcessCn" name="processCn" value=""  readonly> 
-  	 		<button type="button" class="btn btn-primary" id="fn_procBtn();"onclick="fn_add_oper_process()">조치</button>
+  	 		<button type="button" class="btn btn-primary" id="procBtn();"onclick="fn_add_oper_process()">조치</button>
           </td>
         </tr>
          </c:if>
@@ -453,7 +457,9 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
         <button type="button" class="btn btn-default " data-dismiss="modal" id="closeBtn">닫기</button>
         <c:if test="${ ! empty (sessionScope.s_mberId) && (sessionScope.s_mberId) != null  }">
 			 <button type="button" class="btn btn-primary" id="modiBtn" style="display:none;">수정</button>
+			 <!--  글을 등록하기 위한 저장 버튼. -->
 			  <button type="button" class="btn btn-primary" id="addSaveBtn" style="display:none;" onclick="fn_add_oper_improv_req();" >a저장</button>
+			  <!--  글을 수정하고 저장할 때의 버튼. -->
 			 <button type="button" class="btn btn-primary" id="updateSaveBtn" style="display:none;" onclick="fn_update_oper_improv_req();" >u저장</button>
         	 <button type="button" class="btn btn-danger" id="deleteBtn" style="display:none" onclick="fn_remove_oper_improv_req();">삭제</button>
         	 </c:if>

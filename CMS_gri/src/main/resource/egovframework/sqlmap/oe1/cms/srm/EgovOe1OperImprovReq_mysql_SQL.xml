@@ -474,5 +474,12 @@
             ,PROCESS_COMPT_DE =  DATE_FORMAT(CURDATE(), '%Y%m%d')  
 		</isEqual>
       WHERE  OPER_IMPRVM_REQUST_ID = #operImprvmRequstId# 
-</update>  			
+</update>  		
+
+<!-- 조치이력에서 원하는 조치이력을 삭제하기 -->
+	<delete id="operImprovReqDAO.deleteOperProcess">
+			DELETE FROM OE1TNPROCESS
+			WHERE  OPER_PROCESS_ID   = #operProcessId#
+	</delete>
+
 </sqlMap>
