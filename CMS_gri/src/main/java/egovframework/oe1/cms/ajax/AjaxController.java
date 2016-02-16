@@ -1,11 +1,14 @@
 package egovframework.oe1.cms.ajax;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
@@ -18,8 +21,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import egovframework.oe1.cms.com.service.EgovOe1FileMngUtil;
+import egovframework.oe1.cms.com.service.EgovOe1FileVO;
 import egovframework.oe1.cms.com.service.impl.EgovOe1CmmUseDAO;
+import egovframework.oe1.cms.com.service.impl.EgovOe1FileManageDAO;
 import egovframework.oe1.cms.srm.service.EgovOe1OperImprovReqVO;
 import egovframework.oe1.cms.srm.service.EgovOe1OperProcessVO;
 import egovframework.oe1.cms.srm.service.impl.EgovOe1OperImprovReqDAO;
@@ -48,11 +56,21 @@ public class AjaxController {
 	@Resource(name="egovOe1AuthorGroupDAO")
 	private EgovOe1AuthorGroupDAO egovOe1AuthorGroupDAO;
 	
+	// EgovOe1FileManageDAO
+	@Resource(name="FileManageDAO")
+	private EgovOe1FileManageDAO FileManageDAO;
+	
 	/**
 	 * IdGeneration
 	 */
 	@Resource(name="egovOperImprovReqIdGnrService")
 	private EgovIdGnrService operImprovReqIdGnrService;
+	
+    /** EgovFileMngUtil */
+    @Resource(name="EgovFileMngUtil")
+    private EgovOe1FileMngUtil fileUtil;	
+
+	List<MultipartFile> fileArray = new ArrayList< MultipartFile>();
 
 	/* 선택된 운영개선요청 글과 조치이력을 레이어팝업(모달)로 가져오기. */
 	 @RequestMapping(value="/cms/ajax/findOperImprovReqest.do", method=RequestMethod.GET)
@@ -243,10 +261,27 @@ public class AjaxController {
 			return "forward:/cms/srm/gnrl/selectOperImprovReqList.do";
 		}   */
 	 
+	 /* 한번에 다중으로 여러번 파일을 업로드 할 때, 그 파일들을 하나의 List로 쌓기위함. */
+	 @RequestMapping(value="/cms/ajax/fileStorage.do")
+	    public @ResponseBody void fileStorage(final MultipartHttpServletRequest multiRequest) {
+	       
+		 System.out.println(" 파일 쌓는 곳. 스타트");
+	       final Map<String, MultipartFile> files = multiRequest.getFileMap();
+	       System.out.println(files);
+	       Iterator<Entry<String, MultipartFile>> itr =  files.entrySet().iterator();
+
+	       while (itr.hasNext()) {
+	           Entry<String, MultipartFile> entry = itr.next();
+	           fileArray.add(entry.getValue());
+	       }
+	       
+			 System.out.println(" 파일 쌓는 곳. 엔드");
+
+	 }
 	 
 	 /* 운영개선요청게시판에 게시글 등록하기. */
 	 @RequestMapping(value="/cms/ajax/addOperImprovReq.do", method=RequestMethod.POST)
-	 public  @ResponseBody void addOperImprovReq(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status, HttpServletResponse response)throws Exception  {
+	 public  @ResponseBody void addOperImprovReq(@ModelAttribute("operImprovReqVO") EgovOe1OperImprovReqVO operImprovReqVO, EgovOe1OperProcessVO operProcessVO, SessionStatus status)throws Exception  {
 		
 		 System.out.println("#. AjaxController - addOperImprovReq.do  - START!!!");
 		
@@ -257,22 +292,37 @@ public class AjaxController {
 		     return "forward:/cms/com/EgovOe1LoginUsr.do";  //임시로그온페이지 이동
 		}
 		
-		*//** 파일 처리 *//*
-		 List<EgovOe1FileVO> _result = null;
-		 String _atchFileId = "";
-		 final Map<String, MultipartFile> files = multiRequest.getFileMap();
-		 if(!files.isEmpty()){
-			 _result = fileUtil.parseFileInf(files, "", 0, "", "");  
-			 _atchFileId = fileMngService.insertFileInfs(_result);  //파일이 생성되고나면 생성된 첨부파일 ID를 리턴한다.
-		 }
-		 vo.setRequstAtchFileId(_atchFileId);  */
+		/* 파일처리*/
+        List<EgovOe1FileVO> _result = null;
+        String _atchFileId = "";
+        Map<String, MultipartFile> map = new HashMap<String, MultipartFile>();
+
+        System.out.println("filess : "+fileArray);
+        System.out.println("filess size : "+fileArray.size());
+        System.out.println("aa  : "+fileArray.get(1) );
+        for(int i=0; i<fileArray.size(); i++) {
+        	map.put("file_"+i,  fileArray.get(i));
+           System.out.println("myMap1 : "+map.get(i));
+        }
+           System.out.println("myMap2 : "+map);
+          _result = fileUtil.parseFileInf(map, "", 0, "", "");  
+             
+           System.out.println("assq");
+           _atchFileId = FileManageDAO.insertFileInfs(_result);  //파일이 생성되고나면 생성된 첨부파일 ID를 리턴한다.
+        
+           operImprovReqVO.setRequstAtchFileId(_atchFileId);  
+           System.out.println("result");
+           status.setComplete();
+           fileArray.clear();
 		 
 		/** ID Generation Service */
     	String id = operImprovReqIdGnrService.getNextStringId();
     	operImprovReqVO.setOperImprvmRequstId(id);
     	operImprovReqDAO.insertOperImprovReq(operImprovReqVO);    	
+		status.setComplete();
 		
-//		status.setComplete();
+		 System.out.println("#. AjaxController - addOperImprovReq.do  - END!!!");
+
 		
 	 }
 	 

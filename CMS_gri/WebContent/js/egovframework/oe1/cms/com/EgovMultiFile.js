@@ -1,3 +1,4 @@
+/* 기존 소스 보존 */
 /**
  * Convert a single file-input element into a 'multiple' input list
  * Usage:
@@ -13,7 +14,7 @@
  *
  *   4. Add the first element
  *      eg. multi_selector.addElement( document.getElementById( 'first_file_element' ) );
- */
+ *//*
 
 function MultiSelector( list_target, max ){
 
@@ -30,9 +31,9 @@ function MultiSelector( list_target, max ){
 		this.max = -1;
 	};
 	
-	/**
+	*//**
 	 * Add a new file input element
-	 */
+	 *//*
 	this.addElement = function( element ){
 
 		// Make sure it's a file input element
@@ -92,9 +93,9 @@ function MultiSelector( list_target, max ){
 
 	};
 
-	/**
+	*//**
 	 * Add a new row to the list of files
-	 */
+	 *//*
 	this.addListRow = function( element ){
 
 		// Row div
@@ -137,4 +138,199 @@ function MultiSelector( list_target, max ){
 		this.list_target.appendChild( new_row );
 	};
 
-};
+};*/
+
+/* Ajax를 이용한 다중파일 */
+
+$(function() {
+
+	var url  = '/CMS_gri/cms/ajax/fileStorage.do'
+
+    // Setup html5 version
+    $("#html5_uploader").pluploadQueue({
+        // General settings
+        runtimes : 'html5',
+        url :url,
+        chunk_size : '10mb',
+        unique_names : true,
+        
+        // Resize images on clientside if we can
+        resize : {width : 320, height : 240, quality : 90}
+    });
+});
+
+var totalFileLength, totalUploaded, fileCount, filesUploaded;
+
+function debug(s) {
+    var debug = document.getElementById('debug');
+    if (debug) {
+        debug.innerHTML = debug.innerHTML + '<br/>' + s;
+    }
+}
+
+function onUploadComplete(e) {
+    totalUploaded += document.getElementById('files').
+            files[filesUploaded].size;
+    filesUploaded++;
+    debug('완료 ' + filesUploaded + " / " + fileCount);
+    debug('업료드한 용량: ' + totalUploaded);       
+    if (filesUploaded < fileCount) {
+        uploadNext();
+    } else {
+        alert('업로드 완료!');
+    }
+}
+ 
+function onFileSelect(e) {
+    var files = e.target.files; // FileList 객체
+    var output = [];
+    fileCount = files.length;
+    totalFileLength = 0;
+    for (var i=0; i<fileCount; i++) {
+        var file = files[i];
+        output.push(file.name, ' (',
+              file.size, ' 바이트, ',
+              file.lastModifiedDate.toLocaleDateString(), ')'
+        );
+       
+        output.push('<br/>');
+        
+        debug( file.size+ ' 추가');
+        totalFileLength += file.size;
+    }
+   
+    document.getElementById('selectedFiles').innerHTML =
+        output.join('');
+    debug('전체 크기:' + totalFileLength);
+}
+
+function onUploadProgress(e) {
+    if (e.lengthComputable) {
+        var percentComplete = parseInt(
+                (e.loaded + totalUploaded) * 100
+                / totalFileLength);
+        var bar = document.getElementById('bar');
+        bar.style.width = percentComplete + '%';
+        bar.innerHTML = percentComplete + ' % 완료';
+    } else {
+        debug('확인 실패');
+    }
+}
+
+function onUploadFailed(e) {
+    alert("파일 업로드에 실패했습니다.");
+}
+ 
+function uploadNext() {
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData();
+    var file = document.getElementById('files').
+            files[filesUploaded];
+    fd.append("fileToUpload", file);
+    xhr.upload.addEventListener(
+            "progress", onUploadProgress, false);
+    xhr.addEventListener("load", onUploadComplete, false);
+    xhr.addEventListener("error", onUploadFailed, false);
+    xhr.open("POST", "fileupload");
+    debug(file.name+ ' 업로드 중');
+    xhr.send(fd);
+}
+
+function startUpload() {
+    totalUploaded = filesUploaded = 0;
+    uploadNext();
+}
+window.onload = function() {
+    document.getElementById('files').addEventListener(
+            'change', onFileSelect, false);
+    document.getElementById('uploadButton').
+            addEventListener('click', startUpload, false);
+}
+
+var totalFileLength, totalUploaded, fileCount, filesUploaded;
+
+function debug(s) {
+    var debug = document.getElementById('debug');
+    if (debug) {
+        debug.innerHTML = debug.innerHTML + '<br/>' + s;
+    }
+}
+
+function onUploadComplete(e) {
+    totalUploaded += document.getElementById('files').
+            files[filesUploaded].size;
+    filesUploaded++;
+    debug('완료 ' + filesUploaded + " / " + fileCount);
+    debug('업료드한 용량: ' + totalUploaded);       
+    if (filesUploaded < fileCount) {
+        uploadNext();
+    } else {
+        alert('업로드 완료!');
+    }
+}
+ 
+function onFileSelect(e) {
+    var files = e.target.files; // FileList 객체
+    var output = [];
+    fileCount = files.length;
+    totalFileLength = 0;
+    for (var i=0; i<fileCount; i++) {
+        var file = files[i];
+        output.push(file.name, ' (',
+              file.size, ' 바이트, ',
+              file.lastModifiedDate.toLocaleDateString(), ')'
+        );
+       
+        output.push('<br/>');
+        
+        debug( file.size+ ' 추가');
+        totalFileLength += file.size;
+    }
+   
+    document.getElementById('selectedFiles').innerHTML =
+        output.join('');
+    debug('전체 크기:' + totalFileLength);
+}
+
+function onUploadProgress(e) {
+    if (e.lengthComputable) {
+        var percentComplete = parseInt(
+                (e.loaded + totalUploaded) * 100
+                / totalFileLength);
+        var bar = document.getElementById('bar');
+        bar.style.width = percentComplete + '%';
+        bar.innerHTML = percentComplete + ' % 완료';
+    } else {
+        debug('확인 실패');
+    }
+}
+
+function onUploadFailed(e) {
+    alert("파일 업로드에 실패했습니다.");
+}
+ 
+function uploadNext() {
+    var xhr = new XMLHttpRequest();
+    var fd = new FormData();
+    var file = document.getElementById('files').
+            files[filesUploaded];
+    fd.append("fileToUpload", file);
+    xhr.upload.addEventListener(
+            "progress", onUploadProgress, false);
+    xhr.addEventListener("load", onUploadComplete, false);
+    xhr.addEventListener("error", onUploadFailed, false);
+    xhr.open("POST", "fileupload");
+    debug(file.name+ ' 업로드 중');
+    xhr.send(fd);
+}
+
+function startUpload() {
+    totalUploaded = filesUploaded = 0;
+    uploadNext();
+}
+window.onload = function() {
+    document.getElementById('files').addEventListener(
+            'change', onFileSelect, false);
+    document.getElementById('uploadButton').
+            addEventListener('click', startUpload, false);
+}

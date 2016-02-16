@@ -28,6 +28,8 @@
 <meta http-equiv="Content-language" content="ko">
 <title>운영개선요청</title>
 
+
+
 <!-- style -->
 <link href="<c:url value='/css/egovframework/oe1/cms/com/common.css'/>" rel="stylesheet" type="text/css">
 <link href="<c:url value='/css/egovframework/oe1/cms/com/com.css'/>" rel="stylesheet" type="text/css">
@@ -35,33 +37,7 @@
 <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
    
-<!-- script -->
-<script type="text/javascript" src="<c:url value='/js/calendear.js'/>"></script>
-<script type="text/javascript" language="javascript" src="<c:url value='/js/egovframework/oe1/cms/com/EgovMainMenu.js' />" ></script>
-<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery-1.4.2.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.core.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.widget.js'/>"></script>
-<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.accordion.js'/>"></script>
-<script type="text/javascript" src="<c:url value="/js/egovframework/oe1/cms/com/EgovSideMenu.js"/>"></script>
-
-
-
-<style>
-.modiInput {
-	border: 0px;
-}
-.board {
-	-webkit-box-sizing : content-box;
-	box-sizing : content-box;
-}
-</style>
-
-<script>
-
-
-</script>
-
-<!-- jQuery -->
+  <!-- jQuery -->
 <script src="${pageContext.request.contextPath}/js/jquery.js"></script>
 
 
@@ -69,7 +45,33 @@
 <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
 
 <!-- 선택된 운영개선게시글 조회/수정/삭제/저장 하기.-->
-<script src="${pageContext.request.contextPath}/js/egovframework/oe1/cms/srm/EgovOperImprovReqDetail.js"></script>
+<script src="${pageContext.request.contextPath}/js/egovframework/oe1/cms/srm/EgovOperImprovReqDetail.js"></script> 
+   
+<!-- script -->
+<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery-1.4.2.js'/>"></script>
+<script type="text/javascript" src="<c:url value="/js/egovframework/oe1/cms/com/EgovMultiFile.js"/>"></script>
+<script type="text/javascript" src="<c:url value='/js/calendear.js'/>"></script>
+<script type="text/javascript" language="javascript" src="<c:url value='/js/egovframework/oe1/cms/com/EgovMainMenu.js' />" ></script>
+<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.core.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.widget.js'/>"></script>
+<script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.accordion.js'/>"></script>
+<script type="text/javascript" src="<c:url value="/js/egovframework/oe1/cms/com/EgovSideMenu.js"/>"></script>
+
+  <!-- 다중파일업로드-->
+<link href="http://rawgithub.com/moxiecode/plupload/master/js/jquery.plupload.queue/css/jquery.plupload.queue.css" type="text/css" rel="stylesheet" media="screen">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js" type="text/javascript"></script>
+<script src="http://rawgithub.com/moxiecode/plupload/master/js/plupload.full.min.js" type="text/javascript"></script>
+<script src="http://rawgithub.com/moxiecode/plupload/master/js/jquery.plupload.queue/jquery.plupload.queue.min.js" type="text/javascript"></script>
+   
+
+<style>
+.modiInput {
+	border: 0px;
+}
+.
+</style>
+
+
 
 <script type="text/javaScript" language="javascript" defer="defer">
 <!--
@@ -382,8 +384,17 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
         </td>
         </tr>
          <tr>
+         <th scope="row">첨부파일</th>
+         <td colspan="3"><div id="html5_uploader">Your browser doesn't support native upload.</div></td>
+          </tr>
+          <tr>
           <th scope="row">첨부파일목록</th>
-         <td colspan="3"><input type="text"  class="modiInput update" id="detailRqustAtchFiled" name="rqustAtchFiled" value="" readonly></td>
+         <!-- <td colspan="3"><input type="text"  class="modiInput update" id="detailRqustAtchFiled" name="rqustAtchFiled" value="" readonly></td> -->
+        <td colspan="3">
+	  			<c:import url="CMS_gri/cms/cmm/selectFileInfs.do"  charEncoding="utf-8">
+	    			<c:param name="param_atchFileId" value="${vo.requstAtchFileId}" />
+	    		</c:import> 
+			</td>
         </tr>
          <tr class="no_regist">
 	          <th scope="row">요청구분</th>
