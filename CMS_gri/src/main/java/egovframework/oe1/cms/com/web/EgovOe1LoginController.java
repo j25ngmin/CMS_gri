@@ -145,6 +145,7 @@ public class EgovOe1LoginController {
 
         if (resultVO != null && resultVO.getMberId() != null
             && !resultVO.getMberId().equals("") && loginPolicyYn) {
+        	System.out.println("정상적인 로그인");
             // Session
             HttpSession session = request.getSession(true);
             session.setAttribute("s_mberId", resultVO.getMberId());
@@ -152,18 +153,22 @@ public class EgovOe1LoginController {
             session.setAttribute("s_mberNm", resultVO.getMberNm());
             session.setAttribute("s_email", resultVO.getMberEmailAdres());
             session.setAttribute("s_groupId", resultVO.getGroupId());
-
             // spring security 연동
             return "redirect:/j_spring_security_check?j_username="
                 + resultVO.getMberId() + "&j_password=" + resultVO.getUniqId();
-        } else {
-            if (loginVO.getMberId() != null && loginVO.getMberId().length() > 0){
+            
+        } else { 
+        	System.out.println("로그인 화면 페이지로 가는 듯.");
+           
+        	if (loginVO.getMberId() != null && loginVO.getMberId().length() > 0){
+            
             	if(!loginPolicyYn){
             		model.addAttribute("loginFailMsg", "로그인정책에 의해 차단된 IP입니다.");
             	}else{
             		model.addAttribute("loginFailMsg", "아이디와 비밀번호가 일치하지 않습니다.");
             	}
             }
+        	
             return "/cms/com/EgovLoginUsr";
         }
     }
@@ -177,6 +182,7 @@ public class EgovOe1LoginController {
     @RequestMapping(value = "/cms/com/actionMain.do")
     public String actionMain(HttpServletRequest request, ModelMap model)
             throws Exception {
+    	System.out.println("그 다음 여기로 들어온다.");
         // Spring Security
         Boolean isAuthenticated = EgovUserDetailsHelper.isAuthenticated();
         if (!isAuthenticated) {
@@ -216,7 +222,12 @@ public class EgovOe1LoginController {
         session.setAttribute("s_authorNm", user.getAuthorNm());
         session.setAttribute("s_roleList", roleArr);
 
+        if(( user.getAuthorCode() ).equals("ROLE_ADMIN")) {
+        	System.out.println("최고 관리자.");
         return "forward:/cms/com/viewMainPage.do";
+        }else {
+        	return "redirect:/cms/com/EgovOe1Menu.do?s_url=/cms/srm/gnrl/selectOperImprovReqList.do&s_MenuId=MENU-000000000000249";
+        }
     }
 
     /**

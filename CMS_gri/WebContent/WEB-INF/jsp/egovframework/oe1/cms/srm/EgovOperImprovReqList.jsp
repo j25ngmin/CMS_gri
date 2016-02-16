@@ -27,8 +27,10 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Content-language" content="ko">
 <title>운영개선요청</title>
+
 <!-- style -->
 <link href="<c:url value='/css/egovframework/oe1/cms/com/common.css'/>" rel="stylesheet" type="text/css">
+<link href="<c:url value='/css/egovframework/oe1/cms/com/com.css'/>" rel="stylesheet" type="text/css">
 <link href="<c:url value='/css/egovframework/oe1/cms/com/themes/ui-lightness/jquery.ui.all.css'/>" rel="stylesheet" type="text/css">
 <!-- Bootstrap Core CSS - Uses Bootswatch Flatly Theme: http://bootswatch.com/flatly/ -->
 <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
@@ -40,13 +42,18 @@
 <script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.core.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.widget.js'/>"></script>
 <script type="text/javascript" src="<c:url value='/js/egovframework/oe1/cms/com/jquery.ui.accordion.js'/>"></script>
+<script type="text/javascript" src="<c:url value="/js/egovframework/oe1/cms/com/EgovSideMenu.js"/>"></script>
+
+
 
 <style>
-
 .modiInput {
 	border: 0px;
 }
-
+.board {
+	-webkit-box-sizing : content-box;
+	box-sizing : content-box;
+}
 </style>
 
 <script>
@@ -132,28 +139,57 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 <body>
 <noscript>자바스크립트를 지원하지 않는 브라우저에서는 일부 기능을 사용하실 수 없습니다.</noscript>
 
-  	<a href="#top_menu" class="hide_a"></a>  
+  
+
+ <div id="wrapper">
+ 		<div class="overlay"></div>
+ 		<!-- Side Menu -->
+ 		<c:if test="${!empty  sessionScope.s_authorCode}">
+			<c:if test="${ (sessionScope.s_authorCode) != 'ROLE_OPER_ADMIN'}" >
+ 				<div><jsp:include page="/WEB-INF/jsp/egovframework/oe1/cms/com/EgovSideMenu.jsp" /></div>
+ 			</c:if>
+        </c:if> 
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <button type="button" class="hamburger is-closed" data-toggle="offcanvas">
+                <span class="hamb-top"></span>
+    			<span class="hamb-middle"></span>
+				<span class="hamb-bottom"></span>
+            </button>
+            <div class="container">
+                <div class="row" >
+                    	<a href="#top_menu" class="hide_a"></a>  
 <!-- 전체 레이어 시작 -->
 <div id="wrap">
     <!-- header 시작 -->
-    <div id="header"><jsp:include page="/WEB-INF/jsp/egovframework/oe1/cms/com/EgovTop.jsp" /></div>
-    <div id="topnavi"><c:import url="/cms/com/EgovOe1BarMenu.do" charEncoding="utf-8"/></div>  
+	    <c:if test="${!empty  sessionScope.s_authorCode}">
+			<c:if test="${ (sessionScope.s_authorCode) == 'ROLE_ADMIN'}" >
+		    	 <div id="header"><jsp:include page="/WEB-INF/jsp/egovframework/oe1/cms/com/EgovTop.jsp" /></div>
+		   		 <div id="topnavi"><c:import url="/cms/com/EgovOe1BarMenu.do" charEncoding="utf-8"/></div>  
     <!-- //header 끝 -->    
+    		</c:if>
+        </c:if> 
 
     <!-- 메인 시작 -->
     <div id="container">
-        <!-- 좌메뉴 시작 -->
-        <%-- <div id="leftmenu"><c:import url="/cms/com/EgovOe1LeftMenu.do" charEncoding="utf-8"/></div> --%>
-        <!-- 좌메뉴 끝 -->
-
-
-<div id="content"><!-- BODY 내용 START -->
+    	
+        <!-- 좌메뉴 시작 : 최고관리자만 보이게 한다.-->
+        	
+    	<c:if test="${!empty  sessionScope.s_authorCode}">
+			<c:if test="${ (sessionScope.s_authorCode) == 'ROLE_ADMIN'}" >
+		       	<div id="leftmenu"><c:import url="/cms/com/EgovOe1LeftMenu.do" charEncoding="utf-8"/></div>
+		        <!-- 좌메뉴 끝 -->
+        	</c:if>
+        </c:if>
+        
+                        <div id="content"><!-- BODY 내용 START -->
 <div id="content_pop">
-<form:form commandName="vo" id="listForm" name="listForm" method="post" action="oe1/cms/srm/gnrl/selectOperImprovReqList.do" onsubmit="return false;" >
+<form:form commandName="vo" id="listForm" class="board"  name="listForm" method="post" action="oe1/cms/srm/gnrl/selectOperImprovReqList.do" onsubmit="return false;" >
 <input type="hidden" name="selectedId" />
 
 	<!-- 타이틀 -->
-	<div id="h2_topnav"><h1><strong> 운영개선요청 목록</strong></h1></div>
+	<div id="h2_topnav"><h1><strong>경기연구원 유지보수 게시판</strong></h1></div>
 	<!-- // 타이틀 -->
 	<div class="search_area_submit">
 		<ul>
@@ -208,20 +244,18 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 				<col width="60">			
 				<col width="75">
 				<col width="75">			
-				<col width="75">			
-				<col width="50">
+				<col width="75">	
 			</colgroup>	
 			<thead>	  
 			<tr>
-				<th scope="col" align="center">순번<c:out value="${now}" /></th>
+				<th scope="col" align="center">순번</th>
 				<th scope="col" align="center">개선요청명</th>
-				<th scope="col" align="center">처리상태</th>
+				<th scope="col" align="center">진행현황</th>
 				<th scope="col" align="center">업무구분</th>
 				<th scope="col" align="center">요청자</th>
 				<th scope="col" align="center">요청일</th>
 				<th scope="col" align="center">접수일</th>
 				<th scope="col" align="center">처리완료일</th>
-				<th scope="col" align="center">만족도<br/>입력</th>
 			</tr>
 			</thead>
 			<tbody>
@@ -291,23 +325,6 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 						</c:otherwise>
 					</c:choose>
 				</td>
-				<td align="center">
-					<c:choose>
-						<c:when test="${result.requstSttusCode == '05' || result.requstSttusCode == '06'}">
-							<c:choose>
-							<c:when test="${not empty result.stsfdg && result.stsfdg != ''}">
-								<c:out value="Y"/>&nbsp;
-							</c:when>
-							<c:otherwise>
-								<c:out value="N"/>&nbsp;
-							</c:otherwise>
-							</c:choose>
-						</c:when>
-						<c:otherwise>
-							<c:out value="-"/>&nbsp;
-						</c:otherwise>
-					</c:choose>
-				</td>
 			</tr>
 			</c:forEach>
 			</tbody>
@@ -360,7 +377,7 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
         <tr>
           <th scope="row">요청내용</th>
           <td colspan="3" height='100'>
-      		 <div><input type="text"  class="modiInput update" id="detailOperImprvmRequstCn" name="operImprvmRequstCn" style="width:100%;height:100%;"   readonly></div>
+      		 <div><textarea  class="modiInput update" id="detailOperImprvmRequstCn" name="operImprvmRequstCn" rows="6" cols="110"  wrap="hard"  readonly></textarea></div>
         	<div id="detailOperImprvmRequstCn_check"></div>
         </td>
         </tr>
@@ -437,8 +454,8 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 		        	<option value="${codeinfo.code}"  <c:if test="${result.requstSttusCode == codeinfo.code}">selected="selected"</c:if>>${codeinfo.codeNm}</option>
 		      	</c:forEach>  
 	        </select>
-			<input type="text"  class="modiInput process" id="detailProcessCn" name="processCn" value=""  readonly> 
-  	 		<button type="button" class="btn btn-primary" id="procBtn();"onclick="fn_add_oper_process()">조치</button>
+			<textarea class="modiInput process" id="detailProcessCn" name="processCn"  rows="2" cols="85"  wrap="hard"  readonly></textarea>
+  	 		<button type="button" class="btn  btn-sm btn-primary" id="procBtn();"onclick="fn_add_oper_process()">조치</button>
           </td>
         </tr>
          </c:if>
@@ -512,6 +529,14 @@ function fn_egov_OperImprovReqIds_Callback(operImprvmRequstIds){
 <!-- 카피라이트 시작 -->
 <div id="footer"><jsp:include page="/WEB-INF/jsp/egovframework/oe1/cms/com/EgovBottom.jsp" /></div>
 <!-- //카피라이트 끝 --></div>
+                    </div>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+
+    </div>
+    <!-- /#wrapper -->
+
 <!-- 메인 끝 --></div>
 <!-- //전체 DIV끝 -->
 

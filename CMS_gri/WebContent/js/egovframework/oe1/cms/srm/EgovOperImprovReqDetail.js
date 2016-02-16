@@ -73,7 +73,7 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			$('input[id=detailOperImprvmRequstSj]').attr('value',data.reqVO.operImprvmRequstSj); 
 			$('input[id=detailOperJobSecodeNm]').attr('value',data.reqVO.operJobSeCodeNm); 
 			$('input[id=detailComptRequstDe]').attr('value',data.reqVO.comptRequstDe); 
-			$('input[id=detailOperImprvmRequstCn]').attr('value',data.reqVO.operImprvmRequstCn);
+			$("#detailOperImprvmRequstCn").html(data.reqVO.operImprvmRequstCn);
 			$('input[id=detailRequstSttusCode]').attr('value',data.reqVO.requstSttusCode);
 			
 			// 값이 박히기만 할 뿐만아니라 변경도 되야한다.
@@ -90,7 +90,7 @@ function fn_find_oper_improv_req(operImprvmRequstId) {
 			//조치이력 List 돌기
 			   $.each(processList, function(index, data){
 				   $processList.append("<tr><td>"+data.operProcessDate+
-						   "<button id="+data.operProcessId+" class='delProcess' onclick='fn_remove_oper_process("+data.operProcessId+")'>"+
+						   "&nbsp;&nbsp;<button class='btn btn-xs btn-default' style='padding:0' id="+data.operProcessId+" class='delProcess' onclick='fn_remove_oper_process("+data.operProcessId+")'>"+
 						   "<span class='glyphicon glyphicon-remove'>"
 						   +"</button><br>"+
 						   data.operProcessCn+"</td></tr>");
@@ -398,7 +398,6 @@ function fn_modify(add) {
 	$('#modiBtn').attr('style','display: none'); 
 	$('.modiInput').attr('readonly',false);
 	$('.modiInput').attr('style','border: 1px');
-	$('#detailOperImprvmRequstCn').attr('style', 'height: 100%').attr('style', 'width: 100%');
 	if(add) {
 		$("#addSaveBtn").attr('style','display:  lnline-block');
 	}else {
@@ -448,7 +447,7 @@ function regist_check_init() {
 function regist_check() {
 	if( $("#detailOperImprvmRequstSj").val() == "") {
 		 $("#detailOperImprvmRequstSj").attr('style', 'border-color:red'); // 왜 안되니????
-		 $("#detailOperImprvmRequstSj_check").html ('<font color=red>제목</font>을 입력해주세요.');
+		 $("#detailOperImprvmRequstSj_check").html ('<h6><font color=red>제목</font>을 입력해주세요.</h6>');
 		}
 		if( $("#detailComptRequstDe").val() == "" ) {
 		 $("#detailComptRequstDe_check").html ('<font color=red>완료요청일</font>을 선택해주세요.');
